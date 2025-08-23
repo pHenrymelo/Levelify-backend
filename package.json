@@ -1,0 +1,23 @@
+{
+	"name": "Levelify-backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "vitest run",
+		"test:watch": "vitest"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.14.0",
+	"devDependencies": {
+		"@biomejs/biome": "2.2.0",
+		"@types/node": "^24.3.0",
+		"typescript": "^5.9.2",
+		"vitest": "^3.2.4"
+	},
+	"dependencies": {
+		"@tsconfig/node22": "^22.0.2"
+	}
+}
