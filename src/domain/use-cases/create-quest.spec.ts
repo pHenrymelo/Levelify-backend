@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { UniqueEntityID } from '../../core/entities/unique-entity-id';
 import type { Quest } from '../entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
 import { CreateQuestUseCase } from './create-quest';
@@ -14,13 +15,13 @@ describe('Create quest use case tests', () => {
 		const createQuest = new CreateQuestUseCase(fakeQuestsRepository);
 
 		const quest = await createQuest.execute({
-			playerId: 'player-test-id',
-			title: 'quest-1',
+			playerId: new UniqueEntityID(),
+			title: 'quest-1 teste',
 			description: 'quest description',
 		});
 
 		expect(quest.completed).toEqual(false);
-		expect(quest.title).toEqual('quest-1');
+		expect(quest.title).toEqual('quest-1 teste');
 		expect(quest.description).toEqual('quest description');
 	});
 });

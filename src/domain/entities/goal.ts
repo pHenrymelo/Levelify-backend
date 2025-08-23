@@ -1,22 +1,20 @@
-import { randomUUID } from 'node:crypto';
+import { Entity } from '../../core/entities/entity';
+import type { UniqueEntityID } from '../../core/entities/unique-entity-id';
 
 interface GoalProps {
 	statement: string;
-	completed: boolean;
-	questId: string;
+	questId: UniqueEntityID;
 }
 
-export class Goal {
-	public id: string;
-	public statement: string;
-	public completed: boolean;
-	public questId: string;
+export class Goal extends Entity<GoalProps> {
+	private _completed: boolean;
 
-	constructor(props: GoalProps, id?: string) {
-		this.statement = props.statement;
-		this.completed = props.completed;
-		this.questId = props.questId;
+	get completed() {
+		return this._completed;
+	}
 
-		this.id = id ?? randomUUID();
+	constructor(props: GoalProps, completed?: boolean, id?: string) {
+		super(props, id);
+		this._completed = completed ?? false;
 	}
 }

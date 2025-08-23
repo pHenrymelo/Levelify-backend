@@ -1,28 +1,34 @@
-import { randomUUID } from 'node:crypto';
+import { Entity } from '../../core/entities/entity';
+import type { UniqueEntityID } from '../../core/entities/unique-entity-id';
 import type { Slug } from './value-objects/slug';
 
 interface QuestProps {
 	title: string;
 	description: string;
-	playerId: string;
+	playerId: UniqueEntityID;
 	slug: Slug;
+	createdAt: Date;
+	dueDate: Date;
 }
 
-export class Quest {
-	public id: string;
-	public title: string;
-	public description: string;
-	public slug: Slug;
-	public completed: boolean;
-	public playerId: string;
+export class Quest extends Entity<QuestProps> {
+	private _completed: boolean;
+
+	get title() {
+		return this.props.title;
+	}
+
+	get description() {
+		return this.props.description;
+	}
+
+	get completed() {
+		return this._completed;
+	}
 
 	constructor(props: QuestProps, completed?: boolean, id?: string) {
-		this.title = props.title;
-		this.description = props.description;
-		this.playerId = props.playerId;
-		this.slug = props.slug;
+		super(props, id);
 
-		this.completed = completed ?? false;
-		this.id = id ?? randomUUID();
+		this._completed = completed ?? false;
 	}
 }
