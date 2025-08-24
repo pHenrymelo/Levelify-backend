@@ -1,4 +1,4 @@
-import { UniqueEntityID } from '../../core/entities/unique-entity-id';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Quest } from '../entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
 

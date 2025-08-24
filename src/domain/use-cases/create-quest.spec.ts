@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest';
 import type { Quest } from '../entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
 import { CreateQuestUseCase } from './create-quest';
