@@ -4,17 +4,19 @@ import type { UniqueEntityID } from '../../core/entities/unique-entity-id';
 interface GoalProps {
 	statement: string;
 	questId: UniqueEntityID;
+	completed?: boolean;
 }
 
 export class Goal extends Entity<GoalProps> {
-	private _completed: boolean;
+	static create(props: GoalProps, id?: UniqueEntityID) {
+		const goal = new Goal(
+			{
+				...props,
+				completed: false,
+			},
+			id,
+		);
 
-	get completed() {
-		return this._completed;
-	}
-
-	constructor(props: GoalProps, completed?: boolean, id?: string) {
-		super(props, id);
-		this._completed = completed ?? false;
+		return goal;
 	}
 }

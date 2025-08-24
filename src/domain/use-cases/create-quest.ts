@@ -1,4 +1,4 @@
-import type { UniqueEntityID } from '../../core/entities/unique-entity-id';
+import { UniqueEntityID } from '../../core/entities/unique-entity-id';
 import { Quest } from '../entities/quest';
 import { Slug } from '../entities/value-objects/slug';
 import type { QuestsRepository } from '../repositories/quests-repository';
@@ -6,23 +6,19 @@ import type { QuestsRepository } from '../repositories/quests-repository';
 interface CreateQuestUseCaseRequest {
 	title: string;
 	description: string;
-	playerId: UniqueEntityID;
-	completed?: boolean;
+	playerId: string;
 }
 
 export class CreateQuestUseCase {
 	constructor(private questsRepository: QuestsRepository) {}
 
-	async execute({
-		title,
-		description,
-		playerId,
-		completed,
-	}: CreateQuestUseCaseRequest) {
-		const quest = new Quest(
-			{ title, description, playerId, slug: Slug.createFromText(title) },
-			completed,
-		);
+	async execute({ title, description, playerId }: CreateQuestUseCaseRequest) {
+		const quest = Quest.create({
+			title,
+			description,
+			playerId: new UniqueEntityID(playerId),
+			slug: Slug.createFromText(title),
+		});
 
 		await this.questsRepository.create(quest);
 

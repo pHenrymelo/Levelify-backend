@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { UniqueEntityID } from '../../core/entities/unique-entity-id';
 import type { Quest } from '../entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
 import { CreateQuestUseCase } from './create-quest';
@@ -15,7 +14,7 @@ describe('Create quest use case tests', () => {
 		const createQuest = new CreateQuestUseCase(fakeQuestsRepository);
 
 		const quest = await createQuest.execute({
-			playerId: new UniqueEntityID(),
+			playerId: 'player-1-teste-id',
 			title: 'quest-1 teste',
 			description: 'quest description',
 		});

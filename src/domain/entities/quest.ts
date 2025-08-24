@@ -1,5 +1,6 @@
 import { Entity } from '../../core/entities/entity';
 import type { UniqueEntityID } from '../../core/entities/unique-entity-id';
+import type { Optional } from '../../core/types/optional';
 import type { Slug } from './value-objects/slug';
 
 interface QuestProps {
@@ -8,27 +9,37 @@ interface QuestProps {
 	playerId: UniqueEntityID;
 	slug: Slug;
 	createdAt: Date;
-	dueDate: Date;
+	updatedAt?: Date;
+	dueDate?: Date;
+	completed?: boolean;
 }
 
+const twentyfourHoursInMiliseconds = 24 * 60 * 60 * 1000;
 export class Quest extends Entity<QuestProps> {
-	private _completed: boolean;
+	static create(props: Optional<QuestProps, 'createdAt'>, id?: UniqueEntityID) {
+		const quest = new Quest(
+			{
+				...props,
+				completed: false,
+				createdAt: new Date(),
+				dueDate:
+					props.dueDate ?? new Date(Date.now() + twentyfourHoursInMiliseconds),
+			},
+			id,
+		);
 
-	get title() {
+		return quest;
+	}
+
+	public get title() {
 		return this.props.title;
 	}
 
-	get description() {
+	public get description() {
 		return this.props.description;
 	}
 
-	get completed() {
-		return this._completed;
-	}
-
-	constructor(props: QuestProps, completed?: boolean, id?: string) {
-		super(props, id);
-
-		this._completed = completed ?? false;
+	public get completed() {
+		return this.props.completed;
 	}
 }
