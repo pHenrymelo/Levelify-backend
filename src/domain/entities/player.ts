@@ -21,4 +21,20 @@ export class Player extends Entity<PlayerProps> {
 
 		return player;
 	}
+
+	public get name() {
+		return this.props.name;
+	}
+
+	public get level() {
+		return this.props.level;
+	}
+
+	public get title() {
+		return this.props.title;
+	}
+
+	public get job() {
+		return this.props.job;
+	}
 }
