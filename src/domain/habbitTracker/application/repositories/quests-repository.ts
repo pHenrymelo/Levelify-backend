@@ -1,4 +1,4 @@
-import type { Quest } from '../entities/quest';
+import type { Quest } from '../../enterprise/entities/quest';
 
 export interface QuestsRepository {
 	create(quest: Quest): Promise<void>;

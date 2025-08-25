@@ -1,4 +1,4 @@
-import type { Quest } from '../entities/quest';
+import type { Quest } from '../../enterprise/entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
 import { CreateQuestUseCase } from './create-quest';
 
