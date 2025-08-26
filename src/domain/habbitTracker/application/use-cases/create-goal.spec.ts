@@ -1,8 +1,7 @@
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
-import type { GoalsRepository } from '../repositories/goals-repository';
 import { CreateGoalUseCase } from './create-goal';
 
-let inMemoryGoalsRepository: GoalsRepository;
+let inMemoryGoalsRepository: InMemoryGoalsRepository;
 let sut: CreateGoalUseCase;
 
 describe('Create goal use case tests', () => {
@@ -17,6 +16,7 @@ describe('Create goal use case tests', () => {
 			statement: 'goal 1 for quest 1',
 		});
 
+		expect(inMemoryGoalsRepository.items[0].id).toEqual(goal.id);
 		expect(goal.id).toBeTruthy();
 		expect(goal.statement).toEqual('goal 1 for quest 1');
 		expect(goal.completed).toEqual(false);

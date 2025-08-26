@@ -1,8 +1,7 @@
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
-import type { QuestsRepository } from '../repositories/quests-repository';
 import { CreateQuestUseCase } from './create-quest';
 
-let inMemoryQuestsRepository: QuestsRepository;
+let inMemoryQuestsRepository: InMemoryQuestsRepository;
 let sut: CreateQuestUseCase;
 
 describe('Create quest use case tests', () => {
@@ -18,6 +17,7 @@ describe('Create quest use case tests', () => {
 			description: 'quest description',
 		});
 
+		expect(inMemoryQuestsRepository.items[0].id).toEqual(quest.id);
 		expect(quest.id).toBeTruthy();
 		expect(quest.title).toEqual('quest-1 teste');
 		expect(quest.description).toEqual('quest description');
