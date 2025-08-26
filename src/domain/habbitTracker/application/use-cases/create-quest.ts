@@ -8,10 +8,18 @@ interface CreateQuestUseCaseRequest {
 	playerId: string;
 }
 
+interface CreateQuestUseCaseResponse {
+	quest: Quest;
+}
+
 export class CreateQuestUseCase {
 	constructor(private questsRepository: QuestsRepository) {}
 
-	async execute({ title, description, playerId }: CreateQuestUseCaseRequest) {
+	async execute({
+		title,
+		description,
+		playerId,
+	}: CreateQuestUseCaseRequest): Promise<CreateQuestUseCaseResponse> {
 		const quest = Quest.create({
 			title,
 			description,
@@ -20,6 +28,8 @@ export class CreateQuestUseCase {
 
 		await this.questsRepository.create(quest);
 
-		return quest;
+		return {
+			quest,
+		};
 	}
 }
