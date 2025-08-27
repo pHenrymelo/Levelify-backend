@@ -3,14 +3,21 @@ import {
 	Quest,
 	type QuestProps,
 } from '@/domain/habbitTracker/enterprise/entities/quest';
+import { faker } from '@faker-js/faker';
 
-export function MakeQuest(overide: Partial<QuestProps> = {}) {
-	const quest = Quest.create({
-		playerId: new UniqueEntityID('player-1-id'),
-		title: 'quest title',
-		description: 'quest description ',
-		...overide,
-	});
+export function MakeQuest(
+	overide: Partial<QuestProps> = {},
+	id?: UniqueEntityID,
+) {
+	const quest = Quest.create(
+		{
+			playerId: new UniqueEntityID(),
+			title: faker.book.title(),
+			description: faker.lorem.paragraph(),
+			...overide,
+		},
+		id,
+	);
 
 	return quest;
 }
