@@ -22,6 +22,14 @@ export class Goal extends Entity<GoalProps> {
 		return goal;
 	}
 
+	public set statement(statement: string) {
+		this.props.statement = statement;
+	}
+
+	public set completed(completed: boolean) {
+		this.props.completed = completed;
+	}
+
 	public get statement() {
 		return this.props.statement;
 	}

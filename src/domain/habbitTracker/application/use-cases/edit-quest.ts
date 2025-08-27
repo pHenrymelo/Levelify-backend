@@ -1,3 +1,4 @@
+import type { Quest } from '../../enterprise/entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
 
 interface EditQuestUseCaseRequest {
@@ -8,7 +9,9 @@ interface EditQuestUseCaseRequest {
 	dueDate: Date;
 }
 
-type EditQuestUseCaseResponse = {};
+type EditQuestUseCaseResponse = {
+	quest: Quest;
+};
 
 export class EditQuestUseCase {
 	constructor(private questsRepository: QuestsRepository) {}
@@ -36,6 +39,8 @@ export class EditQuestUseCase {
 
 		await this.questsRepository.save(quest);
 
-		return {};
+		return {
+			quest,
+		};
 	}
 }

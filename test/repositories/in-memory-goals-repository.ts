@@ -23,4 +23,10 @@ export class InMemoryGoalsRepository implements GoalsRepository {
 
 		this.items.splice(itemIndex, 1);
 	}
+
+	async save(goal: Goal) {
+		const itemIndex = this.items.findIndex((item) => item.id === goal.id);
+
+		this.items[itemIndex] = goal;
+	}
 }
