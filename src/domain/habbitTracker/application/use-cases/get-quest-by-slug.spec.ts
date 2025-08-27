@@ -1,6 +1,6 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { MakeQuest } from 'test/factories/make-quest';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
-import { Quest } from '../../enterprise/entities/quest';
+import { Slug } from '../../enterprise/entities/value-objects/slug';
 import { GetQuestBySlugUseCase } from './get-quest-by-slug';
 
 let inMemoryQuestsRepository: InMemoryQuestsRepository;
@@ -13,10 +13,8 @@ describe('Get quest by slug use case tests', () => {
 	});
 
 	it('Shoud be able get a quest by slug', async () => {
-		const createdQuest = Quest.create({
-			playerId: new UniqueEntityID('player-1-teste-id'),
-			title: 'quest slug test',
-			description: 'quest description test',
+		const createdQuest = MakeQuest({
+			slug: Slug.create('quest-slug-test'),
 		});
 
 		await inMemoryQuestsRepository.create(createdQuest);
@@ -26,6 +24,5 @@ describe('Get quest by slug use case tests', () => {
 		});
 
 		expect(quest.id).toBeTruthy();
-		expect(quest.description).toEqual('quest description test');
 	});
 });

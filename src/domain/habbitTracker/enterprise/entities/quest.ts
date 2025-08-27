@@ -4,7 +4,7 @@ import type { Optional } from '@/core/types/optional';
 import dayjs from 'dayjs';
 import { Slug } from './value-objects/slug';
 
-interface QuestProps {
+export interface QuestProps {
 	title: string;
 	description: string;
 	playerId: UniqueEntityID;
