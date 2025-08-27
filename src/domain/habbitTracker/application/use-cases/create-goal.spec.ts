@@ -13,6 +13,7 @@ describe('Create goal use case tests', () => {
 	it('Shoud be able create a goal', async () => {
 		const { goal } = await sut.execute({
 			questId: 'quest-01-test',
+			playerId: 'player-01-test',
 			statement: 'goal 1 for quest 1',
 		});
 

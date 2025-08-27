@@ -2,9 +2,10 @@ import { Entity } from '@/core/entities/entity';
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import type { Optional } from '@/core/types/optional';
 
-interface GoalProps {
+export interface GoalProps {
 	statement: string;
 	questId: UniqueEntityID;
+	playerId: UniqueEntityID;
 	completed: boolean;
 }
 
@@ -31,5 +32,9 @@ export class Goal extends Entity<GoalProps> {
 
 	public get completed() {
 		return this.props.completed;
+	}
+
+	public get playerId() {
+		return this.props.playerId;
 	}
 }

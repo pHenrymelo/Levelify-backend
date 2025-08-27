@@ -5,6 +5,7 @@ import type { GoalsRepository } from '../repositories/goals-repository';
 interface CreateGoalUseCaseRequest {
 	statement: string;
 	questId: string;
+	playerId: string;
 }
 
 interface CreateGoalUseCaseResponse {
@@ -16,10 +17,12 @@ export class CreateGoalUseCase {
 
 	async execute({
 		questId,
+		playerId,
 		statement,
 	}: CreateGoalUseCaseRequest): Promise<CreateGoalUseCaseResponse> {
 		const goal = Goal.create({
 			questId: new UniqueEntityID(questId),
+			playerId: new UniqueEntityID(playerId),
 			statement,
 		});
 
