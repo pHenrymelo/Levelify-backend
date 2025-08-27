@@ -5,4 +5,5 @@ export interface QuestsRepository {
 	create(quest: Quest): Promise<void>;
 	findBySlug(slug: string): Promise<Quest | null>;
 	delete(quest: Quest): Promise<void>;
+	save(quest: Quest): Promise<void>;
 }

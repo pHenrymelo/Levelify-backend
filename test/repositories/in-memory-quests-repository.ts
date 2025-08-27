@@ -33,4 +33,10 @@ export class InMemoryQuestsRepository implements QuestsRepository {
 
 		this.items.splice(itemIndex, 1);
 	}
+
+	async save(quest: Quest) {
+		const itemIndex = this.items.findIndex((item) => item.id === quest.id);
+
+		this.items[itemIndex] = quest;
+	}
 }

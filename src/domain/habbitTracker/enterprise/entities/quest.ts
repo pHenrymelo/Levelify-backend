@@ -63,6 +63,12 @@ export class Quest extends Entity<QuestProps> {
 		this.touch();
 	}
 
+	public set completed(completed: boolean) {
+		this.props.completed = completed;
+
+		this.touch;
+	}
+
 	public get title() {
 		return this.props.title;
 	}
