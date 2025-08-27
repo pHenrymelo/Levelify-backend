@@ -7,4 +7,14 @@ export class InMemoryQuestsRepository implements QuestsRepository {
 	async create(quest: Quest) {
 		this.items.push(quest);
 	}
+
+	async findBySlug(slug: string) {
+		const quest = this.items.find((item) => item.slug.value === slug);
+
+		if (!quest) {
+			return null;
+		}
+
+		return quest;
+	}
 }
