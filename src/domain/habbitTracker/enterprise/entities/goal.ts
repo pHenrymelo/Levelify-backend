@@ -14,7 +14,7 @@ export class Goal extends Entity<GoalProps> {
 		const goal = new Goal(
 			{
 				...props,
-				completed: false,
+				completed: props.completed ?? false,
 			},
 			id,
 		);
