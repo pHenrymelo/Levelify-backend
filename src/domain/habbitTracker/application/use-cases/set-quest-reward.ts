@@ -4,49 +4,48 @@ import type { QuestRewardsRepository } from '../repositories/quest-rewards-repos
 import type { QuestsRepository } from '../repositories/quests-repository';
 
 interface SetQuestRewardUseCaseRequest {
-  questId: string;
-  playerId: string;
-  xpAmount?: number;
-  goldAmount?: number;
+	questId: string;
+	playerId: string;
+	xpAmount?: number;
+	goldAmount?: number;
 }
 
 interface SetQuestRewardUseCaseResponse {
-  questReward: QuestReward;
+	questReward: QuestReward;
 }
 
 export class SetQuestRewardUseCase {
-  constructor(
-    private questsRepository: QuestsRepository,
-    private questRewardsRepository: QuestRewardsRepository
-  ) {}
+	constructor(
+		private questsRepository: QuestsRepository,
+		private questRewardsRepository: QuestRewardsRepository,
+	) {}
 
-  async execute({
-    playerId,
-    questId,
-    goldAmount,
-    xpAmount
-  }: SetQuestRewardUseCaseRequest): Promise<SetQuestRewardUseCaseResponse> {
-    const quest = await this.questsRepository.findById(questId);
+	async execute({
+		playerId,
+		questId,
+		goldAmount,
+		xpAmount,
+	}: SetQuestRewardUseCaseRequest): Promise<SetQuestRewardUseCaseResponse> {
+		const quest = await this.questsRepository.findById(questId);
 
-    if (!quest) {
-      throw new Error('Quest not found.');
-    }
+		if (!quest) {
+			throw new Error('Quest not found.');
+		}
 
-    if (playerId !== quest.playerId.toString()) {
-      throw new Error('Permission denied.');
-    }
- 
-    const questReward = QuestReward.create({
-      questId: new UniqueEntityID(questId),
-      xpAmount,
-      goldAmount
-    });
+		if (playerId !== quest.playerId.toString()) {
+			throw new Error('Permission denied.');
+		}
 
-    await this.questRewardsRepository.create(questReward);
+		const questReward = QuestReward.create({
+			questId: new UniqueEntityID(questId),
+			xpAmount,
+			goldAmount,
+		});
 
-    return {
-      questReward
-    };
- 
-  }
+		await this.questRewardsRepository.create(questReward);
+
+		return {
+			questReward,
+		};
+	}
 }

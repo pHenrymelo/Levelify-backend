@@ -1,6 +1,6 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeQuest } from 'test/factories/make-quest';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { DeleteQuestUseCase } from './delete-quest';
 
 let inMemoryQuestsRepository: InMemoryQuestsRepository;

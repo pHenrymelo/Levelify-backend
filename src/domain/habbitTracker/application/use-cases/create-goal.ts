@@ -22,7 +22,6 @@ export class CreateGoalUseCase {
 		questId,
 		statement,
 	}: CreateGoalUseCaseRequest): Promise<CreateGoalUseCaseResponse> {
-
 		const quest = await this.questsRepository.findById(questId);
 
 		if (!quest) {

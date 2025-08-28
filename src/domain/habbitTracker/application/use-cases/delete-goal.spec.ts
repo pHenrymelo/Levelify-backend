@@ -1,6 +1,6 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeGoal } from 'test/factories/make-goal';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { DeleteGoalUseCase } from './delete-goal';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
@@ -13,10 +13,7 @@ describe('Delete quest use case tests', () => {
 	});
 
 	it('Shoud be able delete a goal', async () => {
-		const createdGoal = MakeGoal(
-			{},
-			new UniqueEntityID('goal-to-delete-id'),
-		);
+		const createdGoal = MakeGoal({}, new UniqueEntityID('goal-to-delete-id'));
 
 		await inMemoryGoalsRepository.create(createdGoal);
 

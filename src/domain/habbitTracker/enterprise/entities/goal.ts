@@ -40,5 +40,4 @@ export class Goal extends Entity<GoalProps> {
 	public get completed() {
 		return this.props.completed;
 	}
-
 }

@@ -1,26 +1,24 @@
-import { Entity } from "@/core/entities/entity";
+import { Entity } from '@/core/entities/entity';
 
 export interface RewardProps {
-  xpAmount: number;
-  goldAmount: number;
+	xpAmount: number;
+	goldAmount: number;
 }
 
 export abstract class Reward<Props extends RewardProps> extends Entity<Props> {
+	get xpAmount() {
+		return this.props.xpAmount;
+	}
 
-  get xpAmount() {
-    return this.props.xpAmount;
-  }
+	get goldAmount() {
+		return this.props.goldAmount;
+	}
 
-  get goldAmount() {
-    return this.props.goldAmount;
-  }
+	set xpAmount(xpAmount: number) {
+		this.props.xpAmount = xpAmount;
+	}
 
-  set xpAmount(xpAmount: number) {
-    this.props.xpAmount = xpAmount;
-  }
-
-  set goldAmount(goldAmount: number) {
-    this.props.goldAmount = goldAmount;
-  }
-
+	set goldAmount(goldAmount: number) {
+		this.props.goldAmount = goldAmount;
+	}
 }

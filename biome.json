@@ -17,7 +17,7 @@
 		"rules": {
 			"recommended": true,
 			"complexity": {
-				"noBannedTypes": false
+				"noBannedTypes": "off"
 			}
 		}
 	},

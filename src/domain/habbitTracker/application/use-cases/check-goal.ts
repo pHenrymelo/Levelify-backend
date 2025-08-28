@@ -3,40 +3,40 @@ import type { GoalsRepository } from '../repositories/goals-repository';
 import type { QuestsRepository } from '../repositories/quests-repository';
 
 interface CheckGoalUseCaseRegoal {
-  goalId: string;
+	goalId: string;
 }
 
 type CheckGoalUseCaseResponse = {
-  goal: Goal;
+	goal: Goal;
 };
 
 export class CheckGoalUseCase {
-  constructor(
-    private goalsRepository: GoalsRepository,
-    private questsRepository: QuestsRepository,
-  ) {}
+	constructor(
+		private goalsRepository: GoalsRepository,
+		private questsRepository: QuestsRepository,
+	) {}
 
-  async execute({
-    goalId,
-  }: CheckGoalUseCaseRegoal): Promise<CheckGoalUseCaseResponse> {
-    const goal = await this.goalsRepository.findById(goalId);
+	async execute({
+		goalId,
+	}: CheckGoalUseCaseRegoal): Promise<CheckGoalUseCaseResponse> {
+		const goal = await this.goalsRepository.findById(goalId);
 
-    if (!goal) {
-      throw new Error('Goal not found.');
-    }
+		if (!goal) {
+			throw new Error('Goal not found.');
+		}
 
-    const quest = await this.questsRepository.findById(goal.questId.toValue());
+		const quest = await this.questsRepository.findById(goal.questId.toValue());
 
-    if (!quest) {
-      throw new Error('Quest not found.');
-    }
+		if (!quest) {
+			throw new Error('Quest not found.');
+		}
 
-    goal.completed = !goal.completed;
+		goal.completed = !goal.completed;
 
-    await this.goalsRepository.save(goal);
+		await this.goalsRepository.save(goal);
 
-    return {
-      goal,
-    };
-  }
+		return {
+			goal,
+		};
+	}
 }

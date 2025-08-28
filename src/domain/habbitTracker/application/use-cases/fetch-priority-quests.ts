@@ -2,23 +2,23 @@ import type { Quest } from '../../enterprise/entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
 
 interface FetchPriorityQuestsUseCaseRequest {
-  page: number;
+	page: number;
 }
 
 interface FetchPriorityQuestsUseCaseResponse {
-  quests: Quest[];
+	quests: Quest[];
 }
 
 export class FetchPriorityQuestsUseCase {
-  constructor(private questsRepository: QuestsRepository) {}
+	constructor(private questsRepository: QuestsRepository) {}
 
-  async execute({
-    page,
-  }: FetchPriorityQuestsUseCaseRequest): Promise<FetchPriorityQuestsUseCaseResponse> {
-    const quests = await this.questsRepository.findManyPriority({ page });
+	async execute({
+		page,
+	}: FetchPriorityQuestsUseCaseRequest): Promise<FetchPriorityQuestsUseCaseResponse> {
+		const quests = await this.questsRepository.findManyPriority({ page });
 
-    return {
-      quests,
-    };
-  }
+		return {
+			quests,
+		};
+	}
 }

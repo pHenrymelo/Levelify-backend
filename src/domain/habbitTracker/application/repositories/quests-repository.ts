@@ -1,7 +1,6 @@
 import type { PaginationParams } from '@/core/repositories/pagination-params';
 import type { Quest } from '../../enterprise/entities/quest';
 
-
 export interface QuestsRepository {
 	findById(id: string): Promise<Quest | null>;
 	findBySlug(slug: string): Promise<Quest | null>;

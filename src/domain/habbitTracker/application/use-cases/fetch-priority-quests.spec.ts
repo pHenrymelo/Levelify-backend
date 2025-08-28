@@ -6,48 +6,54 @@ let inMemoryQuestsRepository: InMemoryQuestsRepository;
 let sut: FetchPriorityQuestsUseCase;
 
 describe('Fetch quest by priority use case tests', () => {
-  beforeEach(() => {
-    inMemoryQuestsRepository = new InMemoryQuestsRepository();
-    sut = new FetchPriorityQuestsUseCase(inMemoryQuestsRepository);
-  });
+	beforeEach(() => {
+		inMemoryQuestsRepository = new InMemoryQuestsRepository();
+		sut = new FetchPriorityQuestsUseCase(inMemoryQuestsRepository);
+	});
 
-  it('Shoud be able fetch quests by priority first', async () => {
-    
-    await inMemoryQuestsRepository.create(MakeQuest({
-      dueDate: new Date(2025, 10, 25),
-    }));
+	it('Shoud be able fetch quests by priority first', async () => {
+		await inMemoryQuestsRepository.create(
+			MakeQuest({
+				dueDate: new Date(2025, 10, 25),
+			}),
+		);
 
-    await inMemoryQuestsRepository.create(MakeQuest({
-      dueDate: new Date(2025, 10, 20),
-    }));
+		await inMemoryQuestsRepository.create(
+			MakeQuest({
+				dueDate: new Date(2025, 10, 20),
+			}),
+		);
 
-    await inMemoryQuestsRepository.create(MakeQuest({
-      dueDate: new Date(2025, 10, 23),
-    }));
+		await inMemoryQuestsRepository.create(
+			MakeQuest({
+				dueDate: new Date(2025, 10, 23),
+			}),
+		);
 
+		const { quests } = await sut.execute({
+			page: 1,
+		});
 
-    const { quests } = await sut.execute({
-      page: 1,
-    });
+		expect(quests).toEqual([
+			expect.objectContaining({ dueDate: new Date(2025, 10, 20) }),
+			expect.objectContaining({ dueDate: new Date(2025, 10, 23) }),
+			expect.objectContaining({ dueDate: new Date(2025, 10, 25) }),
+		]);
+	});
 
-    expect(quests).toEqual([
-      expect.objectContaining({dueDate: new Date(2025, 10, 20)}),
-      expect.objectContaining({dueDate: new Date(2025, 10, 23)}),
-      expect.objectContaining({dueDate: new Date(2025, 10, 25)}),
-    ])
-  });
+	it('Shoud be able fetch paginated quests', async () => {
+		for (let index = 0; index < 25; index++) {
+			await inMemoryQuestsRepository.create(
+				MakeQuest({
+					dueDate: new Date(2025, 10, 25),
+				}),
+			);
+		}
 
-  it('Shoud be able fetch paginated quests', async () => {
-    for (let index = 0; index < 25; index++) {
-      await inMemoryQuestsRepository.create(MakeQuest({
-        dueDate: new Date(2025, 10, 25),
-      }));
-    }
+		const { quests } = await sut.execute({
+			page: 2,
+		});
 
-    const { quests } = await sut.execute({
-      page: 2,
-    });
-
-    expect(quests).toHaveLength(5)
-  });
+		expect(quests).toHaveLength(5);
+	});
 });
