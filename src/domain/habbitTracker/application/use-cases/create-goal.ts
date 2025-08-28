@@ -1,6 +1,7 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Goal } from '../../enterprise/entities/goal';
 import type { GoalsRepository } from '../repositories/goals-repository';
+import type { QuestsRepository } from '../repositories/quests-repository';
 
 interface CreateGoalUseCaseRequest {
 	statement: string;
@@ -13,13 +14,28 @@ interface CreateGoalUseCaseResponse {
 }
 
 export class CreateGoalUseCase {
-	constructor(private goalsRepository: GoalsRepository) {}
+	constructor(
+		private goalsRepository: GoalsRepository,
+		private questsRepository: QuestsRepository,
+	) {}
 
 	async execute({
 		questId,
 		playerId,
 		statement,
 	}: CreateGoalUseCaseRequest): Promise<CreateGoalUseCaseResponse> {
+
+		const quest = await this.questsRepository.findById(questId);
+
+		if (!quest) {
+			throw new Error('Quest not found.');
+		}
+
+		if (playerId !== quest.playerId.toString()) {
+			throw new Error('Permission denied.');
+		}
+
+
 		const goal = Goal.create({
 			questId: new UniqueEntityID(questId),
 			playerId: new UniqueEntityID(playerId),

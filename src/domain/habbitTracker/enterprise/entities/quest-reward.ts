@@ -1,13 +1,12 @@
-import { Entity } from "@/core/entities/entity";
 import type { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import type { Optional } from "@/core/types/optional";
-import type { RewardProps } from "./reward";
+import { Reward, type RewardProps } from "./reward";
 
 export interface QuestRewardProps extends RewardProps {
   questId: UniqueEntityID;
 }
 
-export class QuestReward extends Entity<QuestRewardProps> {
+export class QuestReward extends Reward<QuestRewardProps> {
   static create(
     props: Optional<QuestRewardProps, 'xpAmount' | 'goldAmount'>,
     id?: UniqueEntityID
