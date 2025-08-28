@@ -14,17 +14,17 @@ export class DeleteGoalUseCase {
 		goalId,
 		playerId,
 	}: DeleteGoalUseCaseRequest): Promise<DeleteGoalUseCaseResponse> {
-		const quest = await this.goalsRepository.findById(goalId);
+		const goal = await this.goalsRepository.findById(goalId);
 
-		if (!quest) {
+		if (!goal) {
 			throw new Error('Goal not found.');
 		}
 
-		if (playerId !== quest.playerId.toString()) {
+		if (playerId !== goal.playerId.toString()) {
 			throw new Error('Permission denied.');
 		}
 
-		await this.goalsRepository.delete(quest);
+		await this.goalsRepository.delete(goal);
 
 		return {};
 	}
