@@ -1,3 +1,4 @@
+import type { PaginationParams } from '@/core/repositories/pagination-params';
 import type { GoalsRepository } from '@/domain/habbitTracker/application/repositories/goals-repository';
 import type { Goal } from '@/domain/habbitTracker/enterprise/entities/goal';
 
@@ -9,7 +10,8 @@ export class InMemoryGoalsRepository implements GoalsRepository {
 	}
 
 	async findById(id: string) {
-		const goal = this.items.find((item) => item.id.toString() === id);
+		const goal = this.items
+			.find((item) => item.id.toString() === id);
 
 		if (!goal) {
 			return null;
@@ -19,14 +21,24 @@ export class InMemoryGoalsRepository implements GoalsRepository {
 	}
 
 	async delete(goal: Goal) {
-		const itemIndex = this.items.findIndex((item) => item.id === goal.id);
+		const itemIndex = this.items.
+			findIndex((item) => item.id === goal.id);
 
 		this.items.splice(itemIndex, 1);
 	}
 
 	async save(goal: Goal) {
-		const itemIndex = this.items.findIndex((item) => item.id === goal.id);
+		const itemIndex = this.items.
+			findIndex((item) => item.id === goal.id);
 
 		this.items[itemIndex] = goal;
+	}
+
+	async findManyByQuestId(QuestId: string, {page}: PaginationParams) {
+		const goals = this.items
+			.filter((item) => item.questId.toString() === QuestId)
+			.slice((page - 1) * 20, page * 20)
+
+		return goals; 
 	}
 }
