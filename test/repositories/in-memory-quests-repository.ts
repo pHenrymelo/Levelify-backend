@@ -1,3 +1,4 @@
+import type { PaginationParams } from '@/core/repositories/pagination-params';
 import type { QuestsRepository } from '@/domain/habbitTracker/application/repositories/quests-repository';
 import type { Quest } from '@/domain/habbitTracker/enterprise/entities/quest';
 
@@ -38,5 +39,13 @@ export class InMemoryQuestsRepository implements QuestsRepository {
 		const itemIndex = this.items.findIndex((item) => item.id === quest.id);
 
 		this.items[itemIndex] = quest;
+	}
+
+	async findManyPriority({page}: PaginationParams){
+		const quests = this.items
+			.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())
+			.slice((page - 1) * 20, page * 20)
+
+		return quests;
 	}
 }
