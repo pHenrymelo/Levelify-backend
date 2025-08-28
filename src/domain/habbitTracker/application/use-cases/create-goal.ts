@@ -6,7 +6,6 @@ import type { QuestsRepository } from '../repositories/quests-repository';
 interface CreateGoalUseCaseRequest {
 	statement: string;
 	questId: string;
-	playerId: string;
 }
 
 interface CreateGoalUseCaseResponse {
@@ -21,7 +20,6 @@ export class CreateGoalUseCase {
 
 	async execute({
 		questId,
-		playerId,
 		statement,
 	}: CreateGoalUseCaseRequest): Promise<CreateGoalUseCaseResponse> {
 
@@ -31,14 +29,8 @@ export class CreateGoalUseCase {
 			throw new Error('Quest not found.');
 		}
 
-		if (playerId !== quest.playerId.toString()) {
-			throw new Error('Permission denied.');
-		}
-
-
 		const goal = Goal.create({
 			questId: new UniqueEntityID(questId),
-			playerId: new UniqueEntityID(playerId),
 			statement,
 		});
 

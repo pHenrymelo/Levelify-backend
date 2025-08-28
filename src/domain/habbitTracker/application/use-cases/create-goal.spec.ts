@@ -23,7 +23,6 @@ describe('Create goal use case tests', () => {
 
 		const { goal } = await sut.execute({
 			questId: 'quest-1-test-id',
-			playerId: 'player-1-test-id',
 			statement: 'goal 1 for quest 1',
 		});
 

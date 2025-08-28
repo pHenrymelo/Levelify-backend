@@ -14,7 +14,7 @@ describe('Delete quest use case tests', () => {
 
 	it('Shoud be able delete a goal', async () => {
 		const createdGoal = MakeGoal(
-			{ playerId: new UniqueEntityID('player-test-id') },
+			{},
 			new UniqueEntityID('goal-to-delete-id'),
 		);
 
@@ -22,25 +22,8 @@ describe('Delete quest use case tests', () => {
 
 		await sut.execute({
 			goalId: 'goal-to-delete-id',
-			playerId: 'player-test-id',
 		});
 
 		expect(inMemoryGoalsRepository.items).toHaveLength(0);
-	});
-
-	it('Shoud not be able delete a goal from another user', async () => {
-		const createdGoal = MakeGoal(
-			{ playerId: new UniqueEntityID('player-test-id') },
-			new UniqueEntityID('goal-to-delete-id'),
-		);
-
-		await inMemoryGoalsRepository.create(createdGoal);
-
-		expect(async () => {
-			await sut.execute({
-				goalId: 'goal-to-delete-id',
-				playerId: 'not-player-test-id',
-			});
-		}).rejects.toBeInstanceOf(Error);
 	});
 });

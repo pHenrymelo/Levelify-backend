@@ -31,10 +31,6 @@ export class SetGoalRewardUseCase {
     if (!goal) {
       throw new Error('Goal not found.');
     }
-
-    if (playerId !== goal.playerId.toString()) {
-      throw new Error('Permission denied.');
-    }
  
     const goalReward = GoalReward.create({
       goalId: new UniqueEntityID(goalId),

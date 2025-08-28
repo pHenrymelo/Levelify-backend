@@ -11,7 +11,6 @@ export function MakeGoal(
 ) {
 	const goal = Goal.create(
 		{
-			playerId: new UniqueEntityID(),
 			questId: new UniqueEntityID(),
 			statement: faker.book.title(),
 			...overide,

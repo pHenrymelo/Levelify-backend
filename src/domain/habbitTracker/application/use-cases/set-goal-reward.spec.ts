@@ -16,9 +16,7 @@ describe('Set goal reward use case tests', () => {
   });
 
   it('Shoud be able create a goal reward', async () => {
-    await inMemoryGoalsRepository.create(MakeGoal({
-      playerId: new UniqueEntityID('player-1-test-id'),
-    }, new UniqueEntityID('goal-1-test-id')));
+    await inMemoryGoalsRepository.create(MakeGoal({}, new UniqueEntityID('goal-1-test-id')));
 
     const { goalReward } = await sut.execute({
       playerId: 'player-1-test-id',
@@ -34,9 +32,7 @@ describe('Set goal reward use case tests', () => {
   });
 
   it('Shoud be able create a goal reward whitout xpAmount or goldAmount', async () => {
-    await inMemoryGoalsRepository.create(MakeGoal({
-      playerId: new UniqueEntityID('player-1-teste-id'),
-    }, new UniqueEntityID('goal-1-teste-id')));
+    await inMemoryGoalsRepository.create(MakeGoal({}, new UniqueEntityID('goal-1-teste-id')));
 
     const { goalReward } = await sut.execute({
       playerId: 'player-1-teste-id',

@@ -5,7 +5,6 @@ import type { Optional } from '@/core/types/optional';
 export interface GoalProps {
 	statement: string;
 	questId: UniqueEntityID;
-	playerId: UniqueEntityID;
 	completed: boolean;
 }
 
@@ -42,7 +41,4 @@ export class Goal extends Entity<GoalProps> {
 		return this.props.completed;
 	}
 
-	public get playerId() {
-		return this.props.playerId;
-	}
 }
