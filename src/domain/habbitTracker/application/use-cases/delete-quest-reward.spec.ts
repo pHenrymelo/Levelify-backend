@@ -1,6 +1,6 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeQuestReward } from 'test/factories/make-quest-reward';
 import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { DeleteQuestRewardUseCase } from './delete-quest-reward';
 
 let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
@@ -17,10 +17,11 @@ describe('Delete quest use case tests', () => {
 			MakeQuestReward({}, new UniqueEntityID('quest-reward-to-delete-id')),
 		);
 
-		await sut.execute({
+		const result = await sut.execute({
 			questRewardId: 'quest-reward-to-delete-id',
 		});
 
+		expect(result.isRight()).toEqual(true);
 		expect(inMemoryQuestRewardsRepository.items).toHaveLength(0);
 	});
 });

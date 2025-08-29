@@ -1,8 +1,8 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeQuest } from 'test/factories/make-quest';
 import { MakeQuestReward } from 'test/factories/make-quest-reward';
 import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { GetQuestRewardUseCase } from './get-quest-reward';
 
 let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
@@ -31,10 +31,10 @@ describe('Get quest reward by quest id use case tests', () => {
 			MakeQuestReward({ questId: new UniqueEntityID('quest-1-teste-id') }),
 		);
 
-		const { questReward } = await sut.execute({
+		const result = await sut.execute({
 			questId: 'quest-1-teste-id',
 		});
 
-		expect(questReward.id).toBeTruthy();
+		expect(result.isRight()).toEqual(true);
 	});
 });

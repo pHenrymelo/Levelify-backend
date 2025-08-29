@@ -1,8 +1,8 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeGoal } from 'test/factories/make-goal';
 import { MakeGoalReward } from 'test/factories/make-goal-reward';
 import { InMemoryGoalRewardsRepository } from 'test/repositories/in-memory-goal-rewards-repository';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { GetGoalRewardUseCase } from './get-goal-reward';
 
 let inMemoryGoalRewardsRepository: InMemoryGoalRewardsRepository;
@@ -26,10 +26,10 @@ describe('Get goal reward by goal id use case tests', () => {
 			MakeGoalReward({ goalId: new UniqueEntityID('goal-1-teste-id') }),
 		);
 
-		const { goalReward } = await sut.execute({
+		const result = await sut.execute({
 			goalId: 'goal-1-teste-id',
 		});
 
-		expect(goalReward.id).toBeTruthy();
+		expect(result.isRight()).toEqual(true);
 	});
 });

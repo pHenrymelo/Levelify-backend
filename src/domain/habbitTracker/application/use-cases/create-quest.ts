@@ -1,3 +1,4 @@
+import { type Either, right } from '@/core/either';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Quest } from '../../enterprise/entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
@@ -8,9 +9,12 @@ interface CreateQuestUseCaseRequest {
 	playerId: string;
 }
 
-interface CreateQuestUseCaseResponse {
-	quest: Quest;
-}
+type CreateQuestUseCaseResponse = Either<
+	null,
+	{
+		quest: Quest;
+	}
+>;
 
 export class CreateQuestUseCase {
 	constructor(private questsRepository: QuestsRepository) {}
@@ -28,8 +32,6 @@ export class CreateQuestUseCase {
 
 		await this.questsRepository.create(quest);
 
-		return {
-			quest,
-		};
+		return right({ quest });
 	}
 }

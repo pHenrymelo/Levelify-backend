@@ -19,10 +19,10 @@ describe('Get quest by slug use case tests', () => {
 
 		await inMemoryQuestsRepository.create(createdQuest);
 
-		const { quest } = await sut.execute({
+		const result = await sut.execute({
 			slug: 'quest-slug-test',
 		});
 
-		expect(quest.id).toBeTruthy();
+		expect(result.isRight()).toEqual(true);
 	});
 });

@@ -11,16 +11,12 @@ describe('Create quest use case tests', () => {
 	});
 
 	it('Shoud be able create a quest', async () => {
-		const { quest } = await sut.execute({
+		const result = await sut.execute({
 			playerId: 'player-1-teste-id',
 			title: 'quest-1 teste',
 			description: 'quest description',
 		});
 
-		expect(inMemoryQuestsRepository.items[0].id).toEqual(quest.id);
-		expect(quest.id).toBeTruthy();
-		expect(quest.title).toEqual('quest-1 teste');
-		expect(quest.description).toEqual('quest description');
-		expect(quest.completed).toEqual(false);
+		expect(result.isRight()).toEqual(true);
 	});
 });

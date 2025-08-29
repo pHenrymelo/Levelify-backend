@@ -1,7 +1,10 @@
+import { type Either, left, right } from '@/core/either';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { QuestReward } from '../../enterprise/entities/quest-reward';
 import type { QuestRewardsRepository } from '../repositories/quest-rewards-repository';
 import type { QuestsRepository } from '../repositories/quests-repository';
+import { PermissionDeniedError } from './errors/permission-denied-error';
+import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface SetQuestRewardUseCaseRequest {
 	questId: string;
@@ -10,9 +13,12 @@ interface SetQuestRewardUseCaseRequest {
 	goldAmount?: number;
 }
 
-interface SetQuestRewardUseCaseResponse {
-	questReward: QuestReward;
-}
+type SetQuestRewardUseCaseResponse = Either<
+	ResourceNotFoundError | PermissionDeniedError,
+	{
+		questReward: QuestReward;
+	}
+>;
 
 export class SetQuestRewardUseCase {
 	constructor(
@@ -29,11 +35,11 @@ export class SetQuestRewardUseCase {
 		const quest = await this.questsRepository.findById(questId);
 
 		if (!quest) {
-			throw new Error('Quest not found.');
+			return left(new ResourceNotFoundError());
 		}
 
 		if (playerId !== quest.playerId.toString()) {
-			throw new Error('Permission denied.');
+			return left(new PermissionDeniedError());
 		}
 
 		const questReward = QuestReward.create({
@@ -44,8 +50,6 @@ export class SetQuestRewardUseCase {
 
 		await this.questRewardsRepository.create(questReward);
 
-		return {
-			questReward,
-		};
+		return right({ questReward });
 	}
 }

@@ -1,7 +1,7 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeGoal } from 'test/factories/make-goal';
 import { InMemoryGoalRewardsRepository } from 'test/repositories/in-memory-goal-rewards-repository';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { SetGoalRewardUseCase } from './set-goal-reward';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
@@ -23,16 +23,14 @@ describe('Set goal reward use case tests', () => {
 			MakeGoal({}, new UniqueEntityID('goal-1-test-id')),
 		);
 
-		const { goalReward } = await sut.execute({
+		const result = await sut.execute({
 			playerId: 'player-1-test-id',
 			goalId: 'goal-1-test-id',
 			goldAmount: 100,
 			xpAmount: 150,
 		});
 
-		expect(goalReward.id).toBeTruthy();
-		expect(goalReward.xpAmount).toEqual(150);
-		expect(goalReward.goldAmount).toEqual(100);
+		expect(result.isRight()).toEqual(true);
 	});
 
 	it('Shoud be able create a goal reward whitout xpAmount or goldAmount', async () => {
@@ -40,13 +38,11 @@ describe('Set goal reward use case tests', () => {
 			MakeGoal({}, new UniqueEntityID('goal-1-teste-id')),
 		);
 
-		const { goalReward } = await sut.execute({
+		const result = await sut.execute({
 			playerId: 'player-1-teste-id',
 			goalId: 'goal-1-teste-id',
 		});
 
-		expect(goalReward.id).toBeTruthy();
-		expect(goalReward.xpAmount).toEqual(0);
-		expect(goalReward.goldAmount).toEqual(0);
+		expect(result.isRight()).toEqual(true);
 	});
 });

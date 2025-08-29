@@ -1,14 +1,19 @@
+import { type Either, left, right } from '@/core/either';
 import type { Goal } from '../../enterprise/entities/goal';
 import type { GoalsRepository } from '../repositories/goals-repository';
+import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface EditGoalUseCaseRegoal {
 	goalId: string;
 	statement: string;
 }
 
-type EditGoalUseCaseResponse = {
-	goal: Goal;
-};
+type EditGoalUseCaseResponse = Either<
+	ResourceNotFoundError,
+	{
+		goal: Goal;
+	}
+>;
 
 export class EditGoalUseCase {
 	constructor(private goalsRepository: GoalsRepository) {}
@@ -20,15 +25,13 @@ export class EditGoalUseCase {
 		const goal = await this.goalsRepository.findById(goalId);
 
 		if (!goal) {
-			throw new Error('Goal not found.');
+			return left(new ResourceNotFoundError());
 		}
 
 		goal.statement = statement;
 
 		await this.goalsRepository.save(goal);
 
-		return {
-			goal,
-		};
+		return right({ goal });
 	}
 }

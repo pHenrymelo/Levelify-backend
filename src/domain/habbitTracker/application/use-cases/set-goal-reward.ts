@@ -1,7 +1,9 @@
+import { type Either, left, right } from '@/core/either';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { GoalReward } from '../../enterprise/entities/goal-reward';
 import type { GoalRewardsRepository } from '../repositories/goal-rewards-repository';
 import type { GoalsRepository } from '../repositories/goals-repository';
+import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface SetGoalRewardUseCaseRegoal {
 	goalId: string;
@@ -10,9 +12,12 @@ interface SetGoalRewardUseCaseRegoal {
 	goldAmount?: number;
 }
 
-interface SetGoalRewardUseCaseResponse {
-	goalReward: GoalReward;
-}
+type SetGoalRewardUseCaseResponse = Either<
+	ResourceNotFoundError,
+	{
+		goalReward: GoalReward;
+	}
+>;
 
 export class SetGoalRewardUseCase {
 	constructor(
@@ -28,7 +33,7 @@ export class SetGoalRewardUseCase {
 		const goal = await this.goalsRepository.findById(goalId);
 
 		if (!goal) {
-			throw new Error('Goal not found.');
+			return left(new ResourceNotFoundError());
 		}
 
 		const goalReward = GoalReward.create({
@@ -39,8 +44,6 @@ export class SetGoalRewardUseCase {
 
 		await this.goalRewardsRepository.create(goalReward);
 
-		return {
-			goalReward,
-		};
+		return right({ goalReward });
 	}
 }

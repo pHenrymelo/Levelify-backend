@@ -1,6 +1,6 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeGoal } from 'test/factories/make-goal';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { EditGoalUseCase } from './edit-goal';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
@@ -17,11 +17,12 @@ describe('Edit goal use case tests', () => {
 
 		await inMemoryGoalsRepository.create(createdGoal);
 
-		await sut.execute({
+		const result = await sut.execute({
 			goalId: 'goal-to-edit-id',
 			statement: 'Urgent Goal',
 		});
 
+		expect(result.isRight()).toEqual(true);
 		expect(inMemoryGoalsRepository.items[0]).toMatchObject({
 			statement: 'Urgent Goal',
 		});

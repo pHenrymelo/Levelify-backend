@@ -1,10 +1,12 @@
+import { type Either, left, right } from '@/core/either';
 import type { GoalsRepository } from '../repositories/goals-repository';
+import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface DeleteGoalUseCaseRequest {
 	goalId: string;
 }
 
-type DeleteGoalUseCaseResponse = {};
+type DeleteGoalUseCaseResponse = Either<ResourceNotFoundError, {}>;
 
 export class DeleteGoalUseCase {
 	constructor(private goalsRepository: GoalsRepository) {}
@@ -15,11 +17,11 @@ export class DeleteGoalUseCase {
 		const goal = await this.goalsRepository.findById(goalId);
 
 		if (!goal) {
-			throw new Error('Goal not found.');
+			return left(new ResourceNotFoundError());
 		}
 
 		await this.goalsRepository.delete(goal);
 
-		return {};
+		return right({});
 	}
 }

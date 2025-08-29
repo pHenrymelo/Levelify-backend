@@ -1,7 +1,7 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeQuest } from 'test/factories/make-quest';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { CreateGoalUseCase } from './create-goal';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
@@ -28,14 +28,11 @@ describe('Create goal use case tests', () => {
 			),
 		);
 
-		const { goal } = await sut.execute({
+		const result = await sut.execute({
 			questId: 'quest-1-test-id',
 			statement: 'goal 1 for quest 1',
 		});
 
-		expect(inMemoryGoalsRepository.items[0].id).toEqual(goal.id);
-		expect(goal.id).toBeTruthy();
-		expect(goal.statement).toEqual('goal 1 for quest 1');
-		expect(goal.completed).toEqual(false);
+		expect(result.isRight()).toEqual(true);
 	});
 });

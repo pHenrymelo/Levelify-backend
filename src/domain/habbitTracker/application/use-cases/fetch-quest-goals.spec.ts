@@ -33,12 +33,13 @@ describe('Fetch a quest goals use case tests', () => {
 			}),
 		);
 
-		const { goals } = await sut.execute({
+		const result = await sut.execute({
 			questId: createdQuest.id.toString(),
 			page: 1,
 		});
 
-		expect(goals).toHaveLength(3);
+		expect(result.isRight()).toEqual(true);
+		expect(result.value?.goals).toHaveLength(3);
 	});
 
 	it('Shoud be able fetch paginated quest goals', async () => {
@@ -51,12 +52,13 @@ describe('Fetch a quest goals use case tests', () => {
 			);
 		}
 
-		const { goals } = await sut.execute({
+		const result = await sut.execute({
 			questId: createdQuest.id.toString(),
 			page: 2,
 		});
 
-		expect(goals).toHaveLength(5);
+		expect(result.isRight()).toEqual(true);
+		expect(result.value?.goals).toHaveLength(5);
 	});
 
 	it('Shoud be able get a quest goals conclusion percentual', async () => {
@@ -82,11 +84,12 @@ describe('Fetch a quest goals use case tests', () => {
 			}),
 		);
 
-		const { conclusionPercentual } = await sut.execute({
+		const result = await sut.execute({
 			questId: createdQuest.id.toString(),
 			page: 1,
 		});
 
-		expect(conclusionPercentual).toEqual(67);
+		expect(result.isRight()).toEqual(true);
+		expect(result.value?.conclusionPercentual).toEqual(67);
 	});
 });

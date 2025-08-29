@@ -1,5 +1,8 @@
+import { type Either, left, right } from '@/core/either';
 import type { Quest } from '../../enterprise/entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
+import { PermissionDeniedError } from './errors/permission-denied-error';
+import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface EditQuestUseCaseRequest {
 	playerId: string;
@@ -9,9 +12,12 @@ interface EditQuestUseCaseRequest {
 	dueDate: Date;
 }
 
-type EditQuestUseCaseResponse = {
-	quest: Quest;
-};
+type EditQuestUseCaseResponse = Either<
+	ResourceNotFoundError | PermissionDeniedError,
+	{
+		quest: Quest;
+	}
+>;
 
 export class EditQuestUseCase {
 	constructor(private questsRepository: QuestsRepository) {}
@@ -26,11 +32,11 @@ export class EditQuestUseCase {
 		const quest = await this.questsRepository.findById(questId);
 
 		if (!quest) {
-			throw new Error('Quest not found.');
+			return left(new ResourceNotFoundError());
 		}
 
 		if (playerId !== quest.playerId.toString()) {
-			throw new Error('Permission denied.');
+			return left(new PermissionDeniedError());
 		}
 
 		quest.title = title;
@@ -39,8 +45,6 @@ export class EditQuestUseCase {
 
 		await this.questsRepository.save(quest);
 
-		return {
-			quest,
-		};
+		return right({ quest });
 	}
 }

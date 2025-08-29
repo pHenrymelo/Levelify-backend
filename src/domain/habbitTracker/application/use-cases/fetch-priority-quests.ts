@@ -1,3 +1,4 @@
+import { type Either, right } from '@/core/either';
 import type { Quest } from '../../enterprise/entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
 
@@ -5,9 +6,12 @@ interface FetchPriorityQuestsUseCaseRequest {
 	page: number;
 }
 
-interface FetchPriorityQuestsUseCaseResponse {
-	quests: Quest[];
-}
+type FetchPriorityQuestsUseCaseResponse = Either<
+	null,
+	{
+		quests: Quest[];
+	}
+>;
 
 export class FetchPriorityQuestsUseCase {
 	constructor(private questsRepository: QuestsRepository) {}
@@ -17,8 +21,6 @@ export class FetchPriorityQuestsUseCase {
 	}: FetchPriorityQuestsUseCaseRequest): Promise<FetchPriorityQuestsUseCaseResponse> {
 		const quests = await this.questsRepository.findManyPriority({ page });
 
-		return {
-			quests,
-		};
+		return right({ quests });
 	}
 }

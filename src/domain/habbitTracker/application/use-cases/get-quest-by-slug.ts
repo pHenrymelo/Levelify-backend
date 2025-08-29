@@ -1,13 +1,18 @@
+import { type Either, left, right } from '@/core/either';
 import type { Quest } from '../../enterprise/entities/quest';
 import type { QuestsRepository } from '../repositories/quests-repository';
+import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface GetQuestBySlugUseCaseRequest {
 	slug: string;
 }
 
-interface GetQuestBySlugUseCaseResponse {
-	quest: Quest;
-}
+type GetQuestBySlugUseCaseResponse = Either<
+	ResourceNotFoundError,
+	{
+		quest: Quest;
+	}
+>;
 
 export class GetQuestBySlugUseCase {
 	constructor(private questsRepository: QuestsRepository) {}
@@ -18,11 +23,9 @@ export class GetQuestBySlugUseCase {
 		const quest = await this.questsRepository.findBySlug(slug);
 
 		if (!quest) {
-			throw new Error('Quest not found.');
+			return left(new ResourceNotFoundError());
 		}
 
-		return {
-			quest,
-		};
+		return right({ quest });
 	}
 }

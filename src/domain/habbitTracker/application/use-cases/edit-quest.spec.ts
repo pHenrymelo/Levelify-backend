@@ -1,7 +1,8 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeQuest } from 'test/factories/make-quest';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { EditQuestUseCase } from './edit-quest';
+import { PermissionDeniedError } from './errors/permission-denied-error';
 
 let inMemoryQuestsRepository: InMemoryQuestsRepository;
 let sut: EditQuestUseCase;
@@ -22,7 +23,7 @@ describe('Edit quest use case tests', () => {
 
 		const newDueDate = new Date(Date.now() + 3 * 60 * 60 * 1000);
 
-		await sut.execute({
+		const result = await sut.execute({
 			playerId: 'player-test-id',
 			questId: 'quest-to-edit-id',
 			title: 'Urgent Quest',
@@ -30,6 +31,7 @@ describe('Edit quest use case tests', () => {
 			dueDate: newDueDate,
 		});
 
+		expect(result.isRight()).toEqual(true);
 		expect(inMemoryQuestsRepository.items[0]).toMatchObject({
 			title: 'Urgent Quest',
 			description: 'Let him cook',
@@ -47,14 +49,15 @@ describe('Edit quest use case tests', () => {
 
 		const newDueDate = new Date(Date.now() + 3 * 60 * 60 * 1000);
 
-		expect(async () => {
-			await sut.execute({
-				playerId: 'not-player-test-id',
-				questId: createdQuest.id.toValue(),
-				title: 'Urgent Quest',
-				description: 'Let him cook',
-				dueDate: newDueDate,
-			});
-		}).rejects.toBeInstanceOf(Error);
+		const result = await sut.execute({
+			playerId: 'not-player-test-id',
+			questId: createdQuest.id.toValue(),
+			title: 'Urgent Quest',
+			description: 'Let him cook',
+			dueDate: newDueDate,
+		});
+
+		expect(result.isLeft()).toEqual(true);
+		expect(result.value).toBeInstanceOf(PermissionDeniedError);
 	});
 });
