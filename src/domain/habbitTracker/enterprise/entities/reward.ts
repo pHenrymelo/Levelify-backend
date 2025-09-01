@@ -2,21 +2,21 @@ import { Entity } from '@/core/entities/entity';
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import type { Optional } from '@/core/types/optional';
 
+enum rewardTypes {
+	gold,
+	xp,
+}
 export interface RewardProps {
-	xpAmount: number;
-	goldAmount: number;
+	type: rewardTypes;
+	amount: number;
 }
 
 export class Reward<Props extends RewardProps> extends Entity<Props> {
-	static create(
-		props: Optional<RewardProps, 'xpAmount' | 'goldAmount'>,
-		id?: UniqueEntityID,
-	) {
+	static create(props: Optional<RewardProps, 'amount'>, id?: UniqueEntityID) {
 		const questReward = new Reward(
 			{
 				...props,
-				xpAmount: props.xpAmount ?? 0,
-				goldAmount: props.goldAmount ?? 0,
+				amount: props.amount ?? 0,
 			},
 			id,
 		);
@@ -24,19 +24,19 @@ export class Reward<Props extends RewardProps> extends Entity<Props> {
 		return questReward;
 	}
 
-	get xpAmount() {
-		return this.props.xpAmount;
+	get amount() {
+		return this.props.amount;
 	}
 
-	get goldAmount() {
-		return this.props.goldAmount;
+	get type() {
+		return this.props.type;
 	}
 
-	set xpAmount(xpAmount: number) {
-		this.props.xpAmount = xpAmount;
+	set amount(amount: number) {
+		this.props.amount = amount;
 	}
 
-	set goldAmount(goldAmount: number) {
-		this.props.goldAmount = goldAmount;
+	set type(type: rewardTypes) {
+		this.props.type = type;
 	}
 }

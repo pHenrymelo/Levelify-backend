@@ -1,12 +1,12 @@
+import { Entity } from '@/core/entities/entity';
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { Reward, type RewardProps } from './reward';
 
-export interface GoalRewardProps extends RewardProps {
+export interface GoalRewardProps {
 	goalId: UniqueEntityID;
 	rewardId: UniqueEntityID;
 }
 
-export class GoalReward extends Reward<GoalRewardProps> {
+export class GoalReward extends Entity<GoalRewardProps> {
 	get goalId() {
 		return this.props.goalId;
 	}
@@ -16,7 +16,7 @@ export class GoalReward extends Reward<GoalRewardProps> {
 	}
 
 	static create(props: GoalRewardProps, id?: UniqueEntityID) {
-		const goalReward = new Reward(props, id);
+		const goalReward = new GoalReward(props, id);
 
 		return goalReward;
 	}

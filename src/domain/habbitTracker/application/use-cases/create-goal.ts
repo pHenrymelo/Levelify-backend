@@ -1,6 +1,8 @@
 import { type Either, left, right } from '@/core/either';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Goal } from '../../enterprise/entities/goal';
+import { GoalReward } from '../../enterprise/entities/goal-reward';
+import { GoalRewardList } from '../../enterprise/entities/goal-reward-list';
 import type { GoalsRepository } from '../repositories/goals-repository';
 import type { QuestsRepository } from '../repositories/quests-repository';
 import { ResourceNotFoundError } from './errors/resource-not-found-error';
@@ -8,6 +10,7 @@ import { ResourceNotFoundError } from './errors/resource-not-found-error';
 interface CreateGoalUseCaseRequest {
 	statement: string;
 	questId: string;
+	rewardIds: string[];
 }
 
 type CreateGoalUseCaseResponse = Either<
@@ -26,6 +29,7 @@ export class CreateGoalUseCase {
 	async execute({
 		questId,
 		statement,
+		rewardIds,
 	}: CreateGoalUseCaseRequest): Promise<CreateGoalUseCaseResponse> {
 		const quest = await this.questsRepository.findById(questId);
 
@@ -37,6 +41,15 @@ export class CreateGoalUseCase {
 			questId: new UniqueEntityID(questId),
 			statement,
 		});
+
+		const goalRewards = rewardIds.map((rewardId) => {
+			return GoalReward.create({
+				goalId: goal.id,
+				rewardId: new UniqueEntityID(rewardId),
+			});
+		});
+
+		goal.rewards = new GoalRewardList(goalRewards);
 
 		await this.goalsRepository.create(goal);
 

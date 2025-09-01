@@ -1,7 +1,8 @@
-import dayjs from 'dayjs';
 import { Entity } from '@/core/entities/entity';
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import type { Optional } from '@/core/types/optional';
+import dayjs from 'dayjs';
+import { QuestRewardList } from './quest-reward-list';
 import { Slug } from './value-objects/slug';
 
 export interface QuestProps {
@@ -9,6 +10,7 @@ export interface QuestProps {
 	description: string;
 	playerId: UniqueEntityID;
 	slug: Slug;
+	rewards: QuestRewardList;
 	createdAt: Date;
 	updatedAt?: Date;
 	dueDate: Date;
@@ -18,7 +20,10 @@ export interface QuestProps {
 const twentyfourHoursInMiliseconds = 24 * 60 * 60 * 1000;
 export class Quest extends Entity<QuestProps> {
 	static create(
-		props: Optional<QuestProps, 'createdAt' | 'slug' | 'dueDate' | 'completed'>,
+		props: Optional<
+			QuestProps,
+			'createdAt' | 'slug' | 'dueDate' | 'completed' | 'rewards'
+		>,
 		id?: UniqueEntityID,
 	) {
 		const quest = new Quest(
@@ -27,6 +32,7 @@ export class Quest extends Entity<QuestProps> {
 				completed: false,
 				createdAt: new Date(),
 				slug: props.slug ?? Slug.createFromText(props.title),
+				rewards: props.rewards ?? new QuestRewardList(),
 				dueDate:
 					props.dueDate ?? new Date(Date.now() + twentyfourHoursInMiliseconds),
 			},
@@ -69,6 +75,12 @@ export class Quest extends Entity<QuestProps> {
 		this.touch;
 	}
 
+	public set rewards(rewards: QuestRewardList) {
+		this.props.rewards = rewards;
+
+		this.touch;
+	}
+
 	public get title() {
 		return this.props.title;
 	}
@@ -83,6 +95,10 @@ export class Quest extends Entity<QuestProps> {
 
 	public get slug() {
 		return this.props.slug;
+	}
+
+	public get rewards() {
+		return this.props.rewards;
 	}
 
 	public get createdAt() {

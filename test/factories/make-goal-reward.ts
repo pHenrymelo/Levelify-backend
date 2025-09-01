@@ -1,7 +1,8 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { type GoalRewardProps, GoalReward } from '@/domain/habbitTracker/enterprise/entities/goal-reward';
-
-import { faker } from '@faker-js/faker';
+import {
+	GoalReward,
+	type GoalRewardProps,
+} from '@/domain/habbitTracker/enterprise/entities/goal-reward';
 
 export function MakeGoalReward(
 	overide: Partial<GoalRewardProps> = {},
@@ -9,9 +10,8 @@ export function MakeGoalReward(
 ) {
 	const goalReward = GoalReward.create(
 		{
-      goalId: new UniqueEntityID(),
-      goldAmount: faker.number.int(),
-      xpAmount: faker.number.int(),
+			goalId: new UniqueEntityID(),
+			rewardId: new UniqueEntityID(),
 			...overide,
 		},
 		id,

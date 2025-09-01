@@ -1,12 +1,12 @@
+import { Entity } from '@/core/entities/entity';
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { Reward, type RewardProps } from './reward';
 
-export interface QuestRewardProps extends RewardProps {
+export interface QuestRewardProps {
 	questId: UniqueEntityID;
 	rewardId: UniqueEntityID;
 }
 
-export class QuestReward extends Reward<QuestRewardProps> {
+export class QuestReward extends Entity<QuestRewardProps> {
 	get questId() {
 		return this.props.questId;
 	}
@@ -16,7 +16,7 @@ export class QuestReward extends Reward<QuestRewardProps> {
 	}
 
 	static create(props: QuestRewardProps, id?: UniqueEntityID) {
-		const questReward = new Reward(props, id);
+		const questReward = new QuestReward(props, id);
 
 		return questReward;
 	}

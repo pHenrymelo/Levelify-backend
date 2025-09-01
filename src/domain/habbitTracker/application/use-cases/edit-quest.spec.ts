@@ -1,16 +1,25 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeQuest } from 'test/factories/make-quest';
+import { MakeQuestReward } from 'test/factories/make-quest-reward';
+import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
 import { EditQuestUseCase } from './edit-quest';
 import { PermissionDeniedError } from './errors/permission-denied-error';
 
 let inMemoryQuestsRepository: InMemoryQuestsRepository;
+let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
 let sut: EditQuestUseCase;
 
 describe('Edit quest use case tests', () => {
 	beforeEach(() => {
-		inMemoryQuestsRepository = new InMemoryQuestsRepository();
-		sut = new EditQuestUseCase(inMemoryQuestsRepository);
+		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
+		inMemoryQuestsRepository = new InMemoryQuestsRepository(
+			inMemoryQuestRewardsRepository,
+		);
+		sut = new EditQuestUseCase(
+			inMemoryQuestsRepository,
+			inMemoryQuestRewardsRepository,
+		);
 	});
 
 	it('Shoud be able edit a quest', async () => {
@@ -20,6 +29,18 @@ describe('Edit quest use case tests', () => {
 		);
 
 		await inMemoryQuestsRepository.create(createdQuest);
+		await inMemoryQuestRewardsRepository.create(
+			MakeQuestReward({
+				questId: createdQuest.id,
+				rewardId: new UniqueEntityID('001'),
+			}),
+		);
+		await inMemoryQuestRewardsRepository.create(
+			MakeQuestReward({
+				questId: createdQuest.id,
+				rewardId: new UniqueEntityID('002'),
+			}),
+		);
 
 		const newDueDate = new Date(Date.now() + 3 * 60 * 60 * 1000);
 
@@ -29,6 +50,7 @@ describe('Edit quest use case tests', () => {
 			title: 'Urgent Quest',
 			description: 'Let him cook',
 			dueDate: newDueDate,
+			rewardIds: ['001', '003'],
 		});
 
 		expect(result.isRight()).toEqual(true);
@@ -37,6 +59,17 @@ describe('Edit quest use case tests', () => {
 			description: 'Let him cook',
 			dueDate: newDueDate,
 		});
+		expect(inMemoryQuestsRepository.items[0].rewards.currentItems).toHaveLength(
+			2,
+		);
+		expect(inMemoryQuestsRepository.items[0].rewards.currentItems).toEqual([
+			expect.objectContaining({
+				rewardId: new UniqueEntityID('001'),
+			}),
+			expect.objectContaining({
+				rewardId: new UniqueEntityID('003'),
+			}),
+		]);
 	});
 
 	it('Shoud not be able edit a quest from another user', async () => {
@@ -55,6 +88,7 @@ describe('Edit quest use case tests', () => {
 			title: 'Urgent Quest',
 			description: 'Let him cook',
 			dueDate: newDueDate,
+			rewardIds: [],
 		});
 
 		expect(result.isLeft()).toEqual(true);

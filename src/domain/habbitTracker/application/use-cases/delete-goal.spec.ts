@@ -1,14 +1,19 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeGoal } from 'test/factories/make-goal';
+import { InMemoryGoalRewardsRepository } from 'test/repositories/in-memory-goal-rewards-repository';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
 import { DeleteGoalUseCase } from './delete-goal';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
+let inMemoryGoalRewardsRepository: InMemoryGoalRewardsRepository;
 let sut: DeleteGoalUseCase;
 
 describe('Delete quest use case tests', () => {
 	beforeEach(() => {
-		inMemoryGoalsRepository = new InMemoryGoalsRepository();
+		inMemoryGoalRewardsRepository = new InMemoryGoalRewardsRepository();
+		inMemoryGoalsRepository = new InMemoryGoalsRepository(
+			inMemoryGoalRewardsRepository,
+		);
 		sut = new DeleteGoalUseCase(inMemoryGoalsRepository);
 	});
 
