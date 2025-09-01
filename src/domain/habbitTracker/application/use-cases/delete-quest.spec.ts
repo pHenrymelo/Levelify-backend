@@ -1,8 +1,8 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeQuest } from 'test/factories/make-quest';
 import { MakeQuestReward } from 'test/factories/make-quest-reward';
 import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { DeleteQuestUseCase } from './delete-quest';
 import { PermissionDeniedError } from './errors/permission-denied-error';
 

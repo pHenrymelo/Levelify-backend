@@ -1,10 +1,10 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeGoal } from 'test/factories/make-goal';
 import { MakeQuest } from 'test/factories/make-quest';
 import { InMemoryGoalRewardsRepository } from 'test/repositories/in-memory-goal-rewards-repository';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
 import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { CheckGoalUseCase } from './check-goal';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
