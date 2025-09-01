@@ -12,7 +12,9 @@ let sut: GetQuestRewardUseCase;
 describe('Get quest reward by quest id use case tests', () => {
 	beforeEach(() => {
 		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
-		inMemoryQuestsRepository = new InMemoryQuestsRepository();
+		inMemoryQuestsRepository = new InMemoryQuestsRepository(
+			inMemoryQuestRewardsRepository,
+		);
 
 		sut = new GetQuestRewardUseCase(inMemoryQuestRewardsRepository);
 	});

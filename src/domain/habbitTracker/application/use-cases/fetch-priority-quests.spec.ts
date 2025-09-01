@@ -1,13 +1,18 @@
 import { MakeQuest } from 'test/factories/make-quest';
+import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
 import { FetchPriorityQuestsUseCase } from './fetch-priority-quests';
 
 let inMemoryQuestsRepository: InMemoryQuestsRepository;
+let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
 let sut: FetchPriorityQuestsUseCase;
 
 describe('Fetch quest by priority use case tests', () => {
 	beforeEach(() => {
-		inMemoryQuestsRepository = new InMemoryQuestsRepository();
+		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
+		inMemoryQuestsRepository = new InMemoryQuestsRepository(
+			inMemoryQuestRewardsRepository,
+		);
 		sut = new FetchPriorityQuestsUseCase(inMemoryQuestsRepository);
 	});
 

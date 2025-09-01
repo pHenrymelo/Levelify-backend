@@ -12,7 +12,9 @@ let sut: GetGoalRewardUseCase;
 describe('Get goal reward by goal id use case tests', () => {
 	beforeEach(() => {
 		inMemoryGoalRewardsRepository = new InMemoryGoalRewardsRepository();
-		inMemoryGoalsRepository = new InMemoryGoalsRepository();
+		inMemoryGoalsRepository = new InMemoryGoalsRepository(
+			inMemoryGoalRewardsRepository,
+		);
 
 		sut = new GetGoalRewardUseCase(inMemoryGoalRewardsRepository);
 	});

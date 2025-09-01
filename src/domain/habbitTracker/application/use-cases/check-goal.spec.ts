@@ -1,19 +1,29 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MakeGoal } from 'test/factories/make-goal';
 import { MakeQuest } from 'test/factories/make-quest';
+import { InMemoryGoalRewardsRepository } from 'test/repositories/in-memory-goal-rewards-repository';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
+import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
 import { CheckGoalUseCase } from './check-goal';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
 let inMemoryQuestsRepository: InMemoryQuestsRepository;
+let inMemoryGoalRewardsRepository: InMemoryGoalRewardsRepository;
+let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
 
 let sut: CheckGoalUseCase;
 
 describe('Check goal use case tests', () => {
 	beforeEach(() => {
-		inMemoryGoalsRepository = new InMemoryGoalsRepository();
-		inMemoryQuestsRepository = new InMemoryQuestsRepository();
+		inMemoryGoalRewardsRepository = new InMemoryGoalRewardsRepository();
+		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
+		inMemoryGoalsRepository = new InMemoryGoalsRepository(
+			inMemoryGoalRewardsRepository,
+		);
+		inMemoryQuestsRepository = new InMemoryQuestsRepository(
+			inMemoryQuestRewardsRepository,
+		);
 		sut = new CheckGoalUseCase(
 			inMemoryGoalsRepository,
 			inMemoryQuestsRepository,

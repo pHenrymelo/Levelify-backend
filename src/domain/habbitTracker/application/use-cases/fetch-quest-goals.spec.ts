@@ -1,14 +1,19 @@
 import { MakeGoal } from 'test/factories/make-goal';
 import { MakeQuest } from 'test/factories/make-quest';
+import { InMemoryGoalRewardsRepository } from 'test/repositories/in-memory-goal-rewards-repository';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
 import { FetchQuestGoalsUseCase } from './fetch-quest-goals';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
+let inMemoryGoalRewardsRepository: InMemoryGoalRewardsRepository;
 let sut: FetchQuestGoalsUseCase;
 
 describe('Fetch a quest goals use case tests', () => {
 	beforeEach(() => {
-		inMemoryGoalsRepository = new InMemoryGoalsRepository();
+		inMemoryGoalRewardsRepository = new InMemoryGoalRewardsRepository();
+		inMemoryGoalsRepository = new InMemoryGoalsRepository(
+			inMemoryGoalRewardsRepository,
+		);
 		sut = new FetchQuestGoalsUseCase(inMemoryGoalsRepository);
 	});
 
