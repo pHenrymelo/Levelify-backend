@@ -1,7 +1,7 @@
 import { type Either, left, right } from '@/core/either';
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error';
 import type { QuestReward } from '../../enterprise/entities/quest-reward';
 import type { QuestRewardsRepository } from '../repositories/quest-rewards-repository';
-import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface GetQuestRewardUseCaseRequest {
 	questId: string;

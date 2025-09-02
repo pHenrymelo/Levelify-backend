@@ -1,7 +1,7 @@
 import { type Either, left, right } from '@/core/either';
+import { PermissionDeniedError } from '../../../../core/errors/permission-denied-error';
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error';
 import type { QuestsRepository } from '../repositories/quests-repository';
-import { PermissionDeniedError } from './errors/permission-denied-error';
-import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface DeleteQuestUseCaseRequest {
 	playerId: string;

@@ -1,12 +1,12 @@
 import { type Either, left, right } from '@/core/either';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { PermissionDeniedError } from '../../../../core/errors/permission-denied-error';
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error';
 import type { Quest } from '../../enterprise/entities/quest';
 import { QuestReward } from '../../enterprise/entities/quest-reward';
 import { QuestRewardList } from '../../enterprise/entities/quest-reward-list';
 import type { QuestRewardsRepository } from '../repositories/quest-rewards-repository';
 import type { QuestsRepository } from '../repositories/quests-repository';
-import { PermissionDeniedError } from './errors/permission-denied-error';
-import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface EditQuestUseCaseRequest {
 	playerId: string;

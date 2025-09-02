@@ -1,11 +1,11 @@
 import { type Either, left, right } from '@/core/either';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error';
 import { Goal } from '../../enterprise/entities/goal';
 import { GoalReward } from '../../enterprise/entities/goal-reward';
 import { GoalRewardList } from '../../enterprise/entities/goal-reward-list';
 import type { GoalsRepository } from '../repositories/goals-repository';
 import type { QuestsRepository } from '../repositories/quests-repository';
-import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface CreateGoalUseCaseRequest {
 	statement: string;

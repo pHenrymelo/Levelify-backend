@@ -1,6 +1,6 @@
 import { type Either, left, right } from '@/core/either';
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error';
 import type { GoalsRepository } from '../repositories/goals-repository';
-import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface DeleteGoalUseCaseRequest {
 	goalId: string;

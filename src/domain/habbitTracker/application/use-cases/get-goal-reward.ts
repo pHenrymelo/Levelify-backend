@@ -1,7 +1,7 @@
 import { type Either, left, right } from '@/core/either';
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error';
 import type { GoalReward } from '../../enterprise/entities/goal-reward';
 import type { GoalRewardsRepository } from '../repositories/goal-rewards-repository';
-import { ResourceNotFoundError } from './errors/resource-not-found-error';
 
 interface GetGoalRewardUseCaseRegoal {
 	goalId: string;
