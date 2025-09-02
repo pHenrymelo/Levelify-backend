@@ -8,7 +8,7 @@ let inMemoryGoalsRepository: InMemoryGoalsRepository;
 let inMemoryGoalRewardsRepository: InMemoryGoalRewardsRepository;
 let sut: DeleteGoalUseCase;
 
-describe('Delete quest use case tests', () => {
+describe('Delete goal use case tests', () => {
 	beforeEach(() => {
 		inMemoryGoalRewardsRepository = new InMemoryGoalRewardsRepository();
 		inMemoryGoalsRepository = new InMemoryGoalsRepository(

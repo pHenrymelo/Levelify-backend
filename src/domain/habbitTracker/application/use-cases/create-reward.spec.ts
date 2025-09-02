@@ -5,13 +5,13 @@ import { CreateRewardUseCase } from './create-reward';
 let inMemoryRewardRepository: InMemoryRewardsRepository;
 let sut: CreateRewardUseCase;
 
-describe('Create quest use case tests', () => {
+describe('Create quest reward use case tests', () => {
 	beforeEach(() => {
 		inMemoryRewardRepository = new InMemoryRewardsRepository();
 		sut = new CreateRewardUseCase(inMemoryRewardRepository);
 	});
 
-	it('Shoud be able create a quest', async () => {
+	it('Shoud be able create a quest reward', async () => {
 		const result = await sut.execute({
 			type: rewardTypes.xp,
 			amount: 100,

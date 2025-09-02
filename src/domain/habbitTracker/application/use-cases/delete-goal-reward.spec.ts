@@ -6,7 +6,7 @@ import { DeleteGoalRewardUseCase } from './delete-goal-reward';
 let inMemoryGoalRewardsRepository: InMemoryGoalRewardsRepository;
 let sut: DeleteGoalRewardUseCase;
 
-describe('Delete goal use case tests', () => {
+describe('Delete goal reward use case tests', () => {
 	beforeEach(() => {
 		inMemoryGoalRewardsRepository = new InMemoryGoalRewardsRepository();
 		sut = new DeleteGoalRewardUseCase(inMemoryGoalRewardsRepository);

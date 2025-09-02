@@ -6,7 +6,7 @@ import { DeleteQuestRewardUseCase } from './delete-quest-reward';
 let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
 let sut: DeleteQuestRewardUseCase;
 
-describe('Delete quest use case tests', () => {
+describe('Delete quest reward use case tests', () => {
 	beforeEach(() => {
 		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
 		sut = new DeleteQuestRewardUseCase(inMemoryQuestRewardsRepository);
