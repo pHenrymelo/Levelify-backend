@@ -3,6 +3,6 @@ import type { QuestReward } from './quest-reward';
 
 export class QuestRewardList extends WatchedList<QuestReward> {
 	compareItems(a: QuestReward, b: QuestReward): boolean {
-		return a.rewardId === b.rewardId;
+		return a.rewardId.equals(b.rewardId);
 	}
 }
