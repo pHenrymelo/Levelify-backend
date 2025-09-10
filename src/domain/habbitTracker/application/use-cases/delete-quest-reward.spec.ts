@@ -6,7 +6,7 @@ import { DeleteQuestRewardUseCase } from './delete-quest-reward';
 let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
 let sut: DeleteQuestRewardUseCase;
 
-describe('Delete quest use case tests', () => {
+describe('Delete quest reward use case tests', () => {
 	beforeEach(() => {
 		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
 		sut = new DeleteQuestRewardUseCase(inMemoryQuestRewardsRepository);
@@ -17,10 +17,11 @@ describe('Delete quest use case tests', () => {
 			MakeQuestReward({}, new UniqueEntityID('quest-reward-to-delete-id')),
 		);
 
-		await sut.execute({
+		const result = await sut.execute({
 			questRewardId: 'quest-reward-to-delete-id',
 		});
 
+		expect(result.isRight()).toEqual(true);
 		expect(inMemoryQuestRewardsRepository.items).toHaveLength(0);
 	});
 });

@@ -12,7 +12,9 @@ let sut: GetGoalRewardUseCase;
 describe('Get goal reward by goal id use case tests', () => {
 	beforeEach(() => {
 		inMemoryGoalRewardsRepository = new InMemoryGoalRewardsRepository();
-		inMemoryGoalsRepository = new InMemoryGoalsRepository();
+		inMemoryGoalsRepository = new InMemoryGoalsRepository(
+			inMemoryGoalRewardsRepository,
+		);
 
 		sut = new GetGoalRewardUseCase(inMemoryGoalRewardsRepository);
 	});
@@ -26,10 +28,10 @@ describe('Get goal reward by goal id use case tests', () => {
 			MakeGoalReward({ goalId: new UniqueEntityID('goal-1-teste-id') }),
 		);
 
-		const { goalReward } = await sut.execute({
+		const result = await sut.execute({
 			goalId: 'goal-1-teste-id',
 		});
 
-		expect(goalReward.id).toBeTruthy();
+		expect(result.isRight()).toEqual(true);
 	});
 });

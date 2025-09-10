@@ -1,3 +1,5 @@
+import { type Either, left, right } from '@/core/either';
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error';
 import type { QuestReward } from '../../enterprise/entities/quest-reward';
 import type { QuestRewardsRepository } from '../repositories/quest-rewards-repository';
 
@@ -5,9 +7,12 @@ interface GetQuestRewardUseCaseRequest {
 	questId: string;
 }
 
-interface GetQuestRewardUseCaseResponse {
-	questReward: QuestReward;
-}
+type GetQuestRewardUseCaseResponse = Either<
+	ResourceNotFoundError,
+	{
+		questReward: QuestReward;
+	}
+>;
 
 export class GetQuestRewardUseCase {
 	constructor(private questRewardsRepository: QuestRewardsRepository) {}
@@ -19,11 +24,9 @@ export class GetQuestRewardUseCase {
 			await this.questRewardsRepository.findByQuestId(questId);
 
 		if (!questReward) {
-			throw new Error('Quest not found.');
+			return left(new ResourceNotFoundError());
 		}
 
-		return {
-			questReward,
-		};
+		return right({ questReward });
 	}
 }

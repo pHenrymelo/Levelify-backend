@@ -1,10 +1,12 @@
+import { type Either, left, right } from '@/core/either';
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error';
 import type { QuestRewardsRepository } from '../repositories/quest-rewards-repository';
 
 interface DeleteQuestRewardUseCaseRequest {
 	questRewardId: string;
 }
 
-type DeleteQuestRewardUseCaseResponse = {};
+type DeleteQuestRewardUseCaseResponse = Either<ResourceNotFoundError, {}>;
 
 export class DeleteQuestRewardUseCase {
 	constructor(private questRewardsRepository: QuestRewardsRepository) {}
@@ -16,11 +18,11 @@ export class DeleteQuestRewardUseCase {
 			await this.questRewardsRepository.findById(questRewardId);
 
 		if (!questReward) {
-			throw new Error('Quest Reward not found.');
+			return left(new ResourceNotFoundError());
 		}
 
 		await this.questRewardsRepository.delete(questReward);
 
-		return {};
+		return right({});
 	}
 }

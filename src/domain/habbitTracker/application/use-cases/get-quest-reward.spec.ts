@@ -12,7 +12,9 @@ let sut: GetQuestRewardUseCase;
 describe('Get quest reward by quest id use case tests', () => {
 	beforeEach(() => {
 		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
-		inMemoryQuestsRepository = new InMemoryQuestsRepository();
+		inMemoryQuestsRepository = new InMemoryQuestsRepository(
+			inMemoryQuestRewardsRepository,
+		);
 
 		sut = new GetQuestRewardUseCase(inMemoryQuestRewardsRepository);
 	});
@@ -31,10 +33,10 @@ describe('Get quest reward by quest id use case tests', () => {
 			MakeQuestReward({ questId: new UniqueEntityID('quest-1-teste-id') }),
 		);
 
-		const { questReward } = await sut.execute({
+		const result = await sut.execute({
 			questId: 'quest-1-teste-id',
 		});
 
-		expect(questReward.id).toBeTruthy();
+		expect(result.isRight()).toEqual(true);
 	});
 });

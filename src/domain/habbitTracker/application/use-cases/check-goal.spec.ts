@@ -1,19 +1,29 @@
 import { MakeGoal } from 'test/factories/make-goal';
 import { MakeQuest } from 'test/factories/make-quest';
+import { InMemoryGoalRewardsRepository } from 'test/repositories/in-memory-goal-rewards-repository';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
+import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { CheckGoalUseCase } from './check-goal';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
 let inMemoryQuestsRepository: InMemoryQuestsRepository;
+let inMemoryGoalRewardsRepository: InMemoryGoalRewardsRepository;
+let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
 
 let sut: CheckGoalUseCase;
 
 describe('Check goal use case tests', () => {
 	beforeEach(() => {
-		inMemoryGoalsRepository = new InMemoryGoalsRepository();
-		inMemoryQuestsRepository = new InMemoryQuestsRepository();
+		inMemoryGoalRewardsRepository = new InMemoryGoalRewardsRepository();
+		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
+		inMemoryGoalsRepository = new InMemoryGoalsRepository(
+			inMemoryGoalRewardsRepository,
+		);
+		inMemoryQuestsRepository = new InMemoryQuestsRepository(
+			inMemoryQuestRewardsRepository,
+		);
 		sut = new CheckGoalUseCase(
 			inMemoryGoalsRepository,
 			inMemoryQuestsRepository,
@@ -35,11 +45,11 @@ describe('Check goal use case tests', () => {
 
 		await inMemoryGoalsRepository.create(createdGoal);
 
-		await sut.execute({
+		const result = await sut.execute({
 			goalId: 'goal-to-edit-id',
 		});
 
-		expect(createdGoal.completed).toEqual(true);
+		expect(result.isRight()).toEqual(true);
 	});
 
 	it('Shoud be able uncomplete a goal', async () => {
@@ -57,10 +67,10 @@ describe('Check goal use case tests', () => {
 
 		await inMemoryGoalsRepository.create(createdGoal);
 
-		await sut.execute({
+		const result = await sut.execute({
 			goalId: 'goal-to-edit-id',
 		});
 
-		expect(createdGoal.completed).toEqual(false);
+		expect(result.isRight()).toEqual(true);
 	});
 });

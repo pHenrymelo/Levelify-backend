@@ -1,13 +1,18 @@
 import { MakeQuest } from 'test/factories/make-quest';
+import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
 import { FetchPriorityQuestsUseCase } from './fetch-priority-quests';
 
 let inMemoryQuestsRepository: InMemoryQuestsRepository;
+let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
 let sut: FetchPriorityQuestsUseCase;
 
 describe('Fetch quest by priority use case tests', () => {
 	beforeEach(() => {
-		inMemoryQuestsRepository = new InMemoryQuestsRepository();
+		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
+		inMemoryQuestsRepository = new InMemoryQuestsRepository(
+			inMemoryQuestRewardsRepository,
+		);
 		sut = new FetchPriorityQuestsUseCase(inMemoryQuestsRepository);
 	});
 
@@ -30,11 +35,12 @@ describe('Fetch quest by priority use case tests', () => {
 			}),
 		);
 
-		const { quests } = await sut.execute({
+		const result = await sut.execute({
 			page: 1,
 		});
 
-		expect(quests).toEqual([
+		expect(result.isRight()).toEqual(true);
+		expect(result.value?.quests).toEqual([
 			expect.objectContaining({ dueDate: new Date(2025, 10, 20) }),
 			expect.objectContaining({ dueDate: new Date(2025, 10, 23) }),
 			expect.objectContaining({ dueDate: new Date(2025, 10, 25) }),
@@ -50,10 +56,11 @@ describe('Fetch quest by priority use case tests', () => {
 			);
 		}
 
-		const { quests } = await sut.execute({
+		const result = await sut.execute({
 			page: 2,
 		});
 
-		expect(quests).toHaveLength(5);
+		expect(result.isRight()).toEqual(true);
+		expect(result.value?.quests).toHaveLength(5);
 	});
 });

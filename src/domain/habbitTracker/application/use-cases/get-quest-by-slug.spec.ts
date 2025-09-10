@@ -1,14 +1,19 @@
 import { MakeQuest } from 'test/factories/make-quest';
+import { InMemoryQuestRewardsRepository } from 'test/repositories/in-memory-quest-rewards-repository';
 import { InMemoryQuestsRepository } from 'test/repositories/in-memory-quests-repository';
 import { Slug } from '../../enterprise/entities/value-objects/slug';
 import { GetQuestBySlugUseCase } from './get-quest-by-slug';
 
 let inMemoryQuestsRepository: InMemoryQuestsRepository;
+let inMemoryQuestRewardsRepository: InMemoryQuestRewardsRepository;
 let sut: GetQuestBySlugUseCase;
 
 describe('Get quest by slug use case tests', () => {
 	beforeEach(() => {
-		inMemoryQuestsRepository = new InMemoryQuestsRepository();
+		inMemoryQuestRewardsRepository = new InMemoryQuestRewardsRepository();
+		inMemoryQuestsRepository = new InMemoryQuestsRepository(
+			inMemoryQuestRewardsRepository,
+		);
 		sut = new GetQuestBySlugUseCase(inMemoryQuestsRepository);
 	});
 
@@ -19,10 +24,10 @@ describe('Get quest by slug use case tests', () => {
 
 		await inMemoryQuestsRepository.create(createdQuest);
 
-		const { quest } = await sut.execute({
+		const result = await sut.execute({
 			slug: 'quest-slug-test',
 		});
 
-		expect(quest.id).toBeTruthy();
+		expect(result.isRight()).toEqual(true);
 	});
 });

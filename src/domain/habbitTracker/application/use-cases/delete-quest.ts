@@ -1,3 +1,6 @@
+import { type Either, left, right } from '@/core/either';
+import { PermissionDeniedError } from '../../../../core/errors/permission-denied-error';
+import { ResourceNotFoundError } from '../../../../core/errors/resource-not-found-error';
 import type { QuestsRepository } from '../repositories/quests-repository';
 
 interface DeleteQuestUseCaseRequest {
@@ -5,7 +8,10 @@ interface DeleteQuestUseCaseRequest {
 	questId: string;
 }
 
-type DeleteQuestUseCaseResponse = {};
+type DeleteQuestUseCaseResponse = Either<
+	ResourceNotFoundError | PermissionDeniedError,
+	{}
+>;
 
 export class DeleteQuestUseCase {
 	constructor(private questsRepository: QuestsRepository) {}
@@ -17,15 +23,15 @@ export class DeleteQuestUseCase {
 		const quest = await this.questsRepository.findById(questId);
 
 		if (!quest) {
-			throw new Error('Quest not found.');
+			return left(new ResourceNotFoundError());
 		}
 
 		if (playerId !== quest.playerId.toString()) {
-			throw new Error('Permission denied.');
+			return left(new PermissionDeniedError());
 		}
 
 		await this.questsRepository.delete(quest);
 
-		return {};
+		return right({});
 	}
 }

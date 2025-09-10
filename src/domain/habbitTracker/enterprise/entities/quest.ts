@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
-import { Entity } from '@/core/entities/entity';
+import { AggregateRoot } from '@/core/entities/aggregate-root';
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import type { Optional } from '@/core/types/optional';
+import { PriorityQuestEvent } from '../events/priority-quest-event';
+import { QuestRewardList } from './quest-reward-list';
 import { Slug } from './value-objects/slug';
 
 export interface QuestProps {
@@ -9,6 +11,7 @@ export interface QuestProps {
 	description: string;
 	playerId: UniqueEntityID;
 	slug: Slug;
+	rewards: QuestRewardList;
 	createdAt: Date;
 	updatedAt?: Date;
 	dueDate: Date;
@@ -16,9 +19,12 @@ export interface QuestProps {
 }
 
 const twentyfourHoursInMiliseconds = 24 * 60 * 60 * 1000;
-export class Quest extends Entity<QuestProps> {
+export class Quest extends AggregateRoot<QuestProps> {
 	static create(
-		props: Optional<QuestProps, 'createdAt' | 'slug' | 'dueDate' | 'completed'>,
+		props: Optional<
+			QuestProps,
+			'createdAt' | 'slug' | 'dueDate' | 'completed' | 'rewards'
+		>,
 		id?: UniqueEntityID,
 	) {
 		const quest = new Quest(
@@ -27,17 +33,23 @@ export class Quest extends Entity<QuestProps> {
 				completed: false,
 				createdAt: new Date(),
 				slug: props.slug ?? Slug.createFromText(props.title),
+				rewards: props.rewards ?? new QuestRewardList(),
 				dueDate:
 					props.dueDate ?? new Date(Date.now() + twentyfourHoursInMiliseconds),
 			},
 			id,
 		);
 
+		const isPriority = dayjs().diff(quest.dueDate, 'hour') <= 24;
+		if (isPriority) {
+			quest.addDomainEvent(new PriorityQuestEvent(quest));
+		}
+
 		return quest;
 	}
 
 	public get priority(): boolean {
-		return dayjs().diff(this.dueDate, 'hour') >= 24;
+		return dayjs().diff(this.dueDate, 'hour') <= 24;
 	}
 
 	private touch() {
@@ -59,12 +71,22 @@ export class Quest extends Entity<QuestProps> {
 
 	public set dueDate(dueDate: Date) {
 		this.props.dueDate = dueDate;
-
 		this.touch();
+
+		const isPriority = dayjs().diff(this.props.dueDate, 'hour') <= 24;
+		if (isPriority) {
+			this.addDomainEvent(new PriorityQuestEvent(this));
+		}
 	}
 
 	public set completed(completed: boolean) {
 		this.props.completed = completed;
+
+		this.touch;
+	}
+
+	public set rewards(rewards: QuestRewardList) {
+		this.props.rewards = rewards;
 
 		this.touch;
 	}
@@ -83,6 +105,10 @@ export class Quest extends Entity<QuestProps> {
 
 	public get slug() {
 		return this.props.slug;
+	}
+
+	public get rewards() {
+		return this.props.rewards;
 	}
 
 	public get createdAt() {

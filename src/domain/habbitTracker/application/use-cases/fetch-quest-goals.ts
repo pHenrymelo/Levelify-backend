@@ -1,3 +1,4 @@
+import { type Either, right } from '@/core/either';
 import type { Goal } from '../../enterprise/entities/goal';
 import type { GoalsRepository } from '../repositories/goals-repository';
 
@@ -6,10 +7,13 @@ interface FetchQuestGoalsUseCaseRequest {
 	page: number;
 }
 
-interface FetchQuestGoalsUseCaseResponse {
-	goals: Goal[];
-	conclusionPercentual: number;
-}
+type FetchQuestGoalsUseCaseResponse = Either<
+	null,
+	{
+		goals: Goal[];
+		conclusionPercentual: number;
+	}
+>;
 
 export class FetchQuestGoalsUseCase {
 	constructor(private goalsRepository: GoalsRepository) {}
@@ -26,9 +30,9 @@ export class FetchQuestGoalsUseCase {
 			(goals.filter((goal) => goal.completed).length / goals.length) * 100,
 		);
 
-		return {
+		return right({
 			goals,
 			conclusionPercentual,
-		};
+		});
 	}
 }

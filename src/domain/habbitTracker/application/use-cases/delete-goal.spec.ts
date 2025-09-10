@@ -1,14 +1,19 @@
 import { MakeGoal } from 'test/factories/make-goal';
+import { InMemoryGoalRewardsRepository } from 'test/repositories/in-memory-goal-rewards-repository';
 import { InMemoryGoalsRepository } from 'test/repositories/in-memory-goals-repository';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { DeleteGoalUseCase } from './delete-goal';
 
 let inMemoryGoalsRepository: InMemoryGoalsRepository;
+let inMemoryGoalRewardsRepository: InMemoryGoalRewardsRepository;
 let sut: DeleteGoalUseCase;
 
-describe('Delete quest use case tests', () => {
+describe('Delete goal use case tests', () => {
 	beforeEach(() => {
-		inMemoryGoalsRepository = new InMemoryGoalsRepository();
+		inMemoryGoalRewardsRepository = new InMemoryGoalRewardsRepository();
+		inMemoryGoalsRepository = new InMemoryGoalsRepository(
+			inMemoryGoalRewardsRepository,
+		);
 		sut = new DeleteGoalUseCase(inMemoryGoalsRepository);
 	});
 
@@ -17,10 +22,11 @@ describe('Delete quest use case tests', () => {
 
 		await inMemoryGoalsRepository.create(createdGoal);
 
-		await sut.execute({
+		const result = await sut.execute({
 			goalId: 'goal-to-delete-id',
 		});
 
+		expect(result.isRight()).toEqual(true);
 		expect(inMemoryGoalsRepository.items).toHaveLength(0);
 	});
 });

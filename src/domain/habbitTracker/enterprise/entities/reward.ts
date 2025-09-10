@@ -1,24 +1,42 @@
 import { Entity } from '@/core/entities/entity';
+import type { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import type { Optional } from '@/core/types/optional';
 
+export enum rewardTypes {
+	xp = 'XP',
+	goal = 'GOLD',
+}
 export interface RewardProps {
-	xpAmount: number;
-	goldAmount: number;
+	type: rewardTypes;
+	amount: number;
 }
 
-export abstract class Reward<Props extends RewardProps> extends Entity<Props> {
-	get xpAmount() {
-		return this.props.xpAmount;
+export class Reward extends Entity<RewardProps> {
+	static create(props: Optional<RewardProps, 'amount'>, id?: UniqueEntityID) {
+		const questReward = new Reward(
+			{
+				...props,
+				amount: props.amount ?? 0,
+			},
+			id,
+		);
+
+		return questReward;
 	}
 
-	get goldAmount() {
-		return this.props.goldAmount;
+	get amount() {
+		return this.props.amount;
 	}
 
-	set xpAmount(xpAmount: number) {
-		this.props.xpAmount = xpAmount;
+	get type() {
+		return this.props.type;
 	}
 
-	set goldAmount(goldAmount: number) {
-		this.props.goldAmount = goldAmount;
+	set amount(amount: number) {
+		this.props.amount = amount;
+	}
+
+	set type(type: rewardTypes) {
+		this.props.type = type;
 	}
 }
