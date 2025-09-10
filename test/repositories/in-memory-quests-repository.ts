@@ -1,3 +1,4 @@
+import { DomainEvents } from '@/core/events/domain-events';
 import type { PaginationParams } from '@/core/repositories/pagination-params';
 import type { QuestRewardsRepository } from '@/domain/habbitTracker/application/repositories/quest-rewards-repository';
 import type { QuestsRepository } from '@/domain/habbitTracker/application/repositories/quests-repository';
@@ -10,6 +11,7 @@ export class InMemoryQuestsRepository implements QuestsRepository {
 
 	async create(quest: Quest) {
 		this.items.push(quest);
+		DomainEvents.dispatchEventsForAggregate(quest.id);
 	}
 
 	async findBySlug(slug: string) {
@@ -44,6 +46,7 @@ export class InMemoryQuestsRepository implements QuestsRepository {
 		const itemIndex = this.items.findIndex((item) => item.id === quest.id);
 
 		this.items[itemIndex] = quest;
+		DomainEvents.dispatchEventsForAggregate(quest.id);
 	}
 
 	async findManyPriority({ page }: PaginationParams) {

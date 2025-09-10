@@ -1,7 +1,7 @@
+import dayjs from 'dayjs';
 import { AggregateRoot } from '@/core/entities/aggregate-root';
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import type { Optional } from '@/core/types/optional';
-import dayjs from 'dayjs';
 import { PriorityQuestEvent } from '../events/priority-quest-event';
 import { QuestRewardList } from './quest-reward-list';
 import { Slug } from './value-objects/slug';
@@ -40,17 +40,16 @@ export class Quest extends AggregateRoot<QuestProps> {
 			id,
 		);
 
+		const isPriority = dayjs().diff(quest.dueDate, 'hour') <= 24;
+		if (isPriority) {
+			quest.addDomainEvent(new PriorityQuestEvent(quest));
+		}
+
 		return quest;
 	}
 
 	public get priority(): boolean {
-		const isPiority = dayjs().diff(this.dueDate, 'hour') <= 24;
-
-		if (isPiority) {
-			this.addDomainEvent(new PriorityQuestEvent(this));
-		}
-
-		return isPiority;
+		return dayjs().diff(this.dueDate, 'hour') <= 24;
 	}
 
 	private touch() {
@@ -72,8 +71,12 @@ export class Quest extends AggregateRoot<QuestProps> {
 
 	public set dueDate(dueDate: Date) {
 		this.props.dueDate = dueDate;
-
 		this.touch();
+
+		const isPriority = dayjs().diff(this.props.dueDate, 'hour') <= 24;
+		if (isPriority) {
+			this.addDomainEvent(new PriorityQuestEvent(this));
+		}
 	}
 
 	public set completed(completed: boolean) {
