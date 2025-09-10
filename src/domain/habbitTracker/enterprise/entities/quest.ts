@@ -1,7 +1,8 @@
-import dayjs from 'dayjs';
-import { Entity } from '@/core/entities/entity';
+import { AggregateRoot } from '@/core/entities/aggregate-root';
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import type { Optional } from '@/core/types/optional';
+import dayjs from 'dayjs';
+import { PriorityQuestEvent } from '../events/priority-quest-event';
 import { QuestRewardList } from './quest-reward-list';
 import { Slug } from './value-objects/slug';
 
@@ -18,7 +19,7 @@ export interface QuestProps {
 }
 
 const twentyfourHoursInMiliseconds = 24 * 60 * 60 * 1000;
-export class Quest extends Entity<QuestProps> {
+export class Quest extends AggregateRoot<QuestProps> {
 	static create(
 		props: Optional<
 			QuestProps,
@@ -43,7 +44,13 @@ export class Quest extends Entity<QuestProps> {
 	}
 
 	public get priority(): boolean {
-		return dayjs().diff(this.dueDate, 'hour') >= 24;
+		const isPiority = dayjs().diff(this.dueDate, 'hour') <= 24;
+
+		if (isPiority) {
+			this.addDomainEvent(new PriorityQuestEvent(this));
+		}
+
+		return isPiority;
 	}
 
 	private touch() {
